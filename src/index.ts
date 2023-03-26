@@ -1,11 +1,12 @@
 import "./scss/styles.scss";
 import App from './app';
+import { Constants } from "./constants";
 
 /**
  * Query selector string 
  * for the canvas target
  */
-const target = '#drawing-canvas';
+const target = `#${Constants.CANVAS_TARGET}`;
 
 
 

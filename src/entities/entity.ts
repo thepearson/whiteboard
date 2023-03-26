@@ -2,7 +2,7 @@ import * as Vec2 from 'vector2d'
 import { Vector } from 'vector2d';
 import drawCircle from '../util/circle';
 import Color from '../util/color';
-import Drawing from './drawing';
+import Drawing from '../drawing';
 
 /**
  * Core entity class, all objects within the game field are entities.
@@ -56,7 +56,6 @@ export default abstract class Entity {
     this.created = Date.now();
   }
 
-
   /**
    * Sets Color
    *
@@ -67,7 +66,6 @@ export default abstract class Entity {
   public setColor(color: Color): void {
     this.color = color;
   }
-
 
   /**
    * Render the entity, by default all entities are treated as circles.

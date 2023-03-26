@@ -1,8 +1,10 @@
 import { Constants } from "./constants";
 import * as Vec2 from "vector2d";
-import Drawing from "./obj/drawing";
-import Marker from "./obj/marker";
-import Pallette from "./obj/pallette";
+import Drawing from "./drawing";
+import Marker from "./tools/marker";
+import Pallette from "./hud/pallette";
+import Hud from "./hud/hud";
+import { Vector } from "vector2d";
 
 /**
  * The top-level Game class, manages setup, base loop, and events
@@ -82,16 +84,22 @@ export default class App {
     // Create world
     this.drawing = new Drawing();
     this.drawing.setPen(new Marker(this.drawing));
-    this.drawing.setPallette(new Pallette());
+    //this.drawing.setPallette(new Pallette());
 
-    // Add player to game
+    // Items to the hud
+    const hud = new Hud();
+    const pallette = new Pallette(new Vector(Constants.CANVAS_SIZE.width / 2, Constants.CANVAS_SIZE.height - Constants.PALLETTE_SIZE));
+    pallette.setColorIndex(0);
+    hud.addItem(pallette);
+
+    this.drawing.hud = hud;
     
-
     // Add events
     if (this.canvas instanceof HTMLCanvasElement) {
       this.mouse_move = this.canvas.addEventListener("mousemove", (event: MouseEvent) => {
         const mouse_pos = new Vec2.Vector(event.clientX, event.clientY);
         this.drawing?.setTargetPosition(mouse_pos);
+        hud.setCursorPosition(mouse_pos);
       })
 
       this.mouse_down = this.canvas.addEventListener("mousedown", (event: MouseEvent) => {
@@ -100,9 +108,9 @@ export default class App {
 
       this.mouse_wheel = this.canvas.addEventListener("wheel", (event: WheelEvent) => {
         if (event.deltaY > 0) {
-          this.drawing?.pen?.setSize(this.drawing?.pen.size + 2)
-        } else {
           this.drawing?.pen?.setSize(this.drawing?.pen.size - 2)
+        } else {
+          this.drawing?.pen?.setSize(this.drawing?.pen.size + 2)
         }
       })
 

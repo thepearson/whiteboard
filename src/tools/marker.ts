@@ -1,8 +1,8 @@
 import drawCircle from "../util/circle";
 import Color from "../util/color";
-import Drawing from "./drawing";
-import Entity from "./entity";
-import Freehand from "./freehand";
+import Drawing from "../drawing";
+import Entity from "../entities/entity";
+import Freehand from "../entities/freehand";
 import Pen from "./pen";
 
 export default class Marker extends Pen {
@@ -31,7 +31,7 @@ export default class Marker extends Pen {
 
   
   public getEntity(): Entity {
-    const color = this.drawing.pallette?.getColor() ? this.drawing.pallette?.getColor() : new Color(0, 0, 0, 1);
+    const color = this.drawing.getColor();
     return new Freehand(this.size, color);
   }
 }

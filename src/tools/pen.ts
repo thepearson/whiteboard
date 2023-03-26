@@ -1,8 +1,8 @@
 import { Vector } from "vector2d";
 import drawCircle from "../util/circle";
 import Color from "../util/color";
-import Drawing from "./drawing";
-import Entity from "./entity";
+import Drawing from "../drawing";
+import Entity from "../entities/entity";
 
 export default abstract class Pen {
 
@@ -81,7 +81,7 @@ export default abstract class Pen {
    * @return  {void}          [return description]
    */
   public setSize(size: number): void {
-    if (size > 0) this.size = Math.min(size, 50);
+    if (size > 0) this.size = Math.min(size, 100);
   }
 
   /**

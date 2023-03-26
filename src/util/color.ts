@@ -51,6 +51,17 @@ export default class Color {
   }
 
   /**
+   * Returns an array of RGB values
+   *
+   * @return  {Array<number>}  
+   */
+  public getRgbString(): string {
+    if (this.a) return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
+    return `rgba(${this.r}, ${this.g}, ${this.b})`;
+  }
+
+
+  /**
    * Return array of HSL values
    * 
    * From: https://css-tricks.com/converting-color-spaces-in-javascript/

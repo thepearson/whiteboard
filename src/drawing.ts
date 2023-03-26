@@ -1,8 +1,11 @@
-import Entity from "./entity";
+import Entity from "./entities/entity";
 import * as Vec2 from 'vector2d'; 
-import { Constants } from "../constants";
-import Pen from "./pen";
-import Pallette from "./pallette";
+import { Constants } from "./constants";
+import Pen from "./tools/pen";
+import Pallette from "./hud/pallette";
+import Hud from "./hud/hud";
+import Color from "./util/color";
+import HudItem from "./hud/hud_item";
 
 /**
  * Main world class, constructs everytrhing about the game world
@@ -18,11 +21,11 @@ export default class Drawing {
   entities: Map<number, Entity> = new Map();
 
   /**
-   * Canvas element used for rebndering the blood
+   * Heads up display (GUI)
    * 
-   * @var {HTMLCanvasElement}
+   * @var {Hud}
    */
-  background: HTMLCanvasElement | null = null;
+  hud: Hud | null = null;
 
   /**
    * Entity incremental number, used to track unique numerical
@@ -59,12 +62,6 @@ export default class Drawing {
    */
   pen: Pen | null = null;
 
-  /**
-   * Current palette
-   * 
-   * @var {Pallette}
-   */
-  pallette: Pallette | null = null;
 
   /**
    * [description]
@@ -103,7 +100,7 @@ export default class Drawing {
    * 
    * @var {boolean}
    */
-  show_debug: boolean = true;
+  show_debug: boolean = false;
 
   /**
    * Returns a game Entity
@@ -130,17 +127,6 @@ export default class Drawing {
     entity.drawing = this;
     this.entities.set(this.entity_id, entity);
     this.entity_id += 1;
-  }
-
-  /**
-   * Set the pallette
-   *
-   * @param   {Pen}  pen  Set's the active pen to Pen
-   *
-   * @return  {void}
-   */
-  public setPallette(pallette: Pallette): void {
-    this.pallette = pallette;
   }
 
   /**
@@ -247,7 +233,21 @@ export default class Drawing {
    * @return  {void}
    */
   public drawGui(context: CanvasRenderingContext2D): void {
-  
+    if (!this.hud) return;
+    this.hud.render(context);
+  }
+
+  /**
+   * Returns the current active color
+   *
+   * @return  {Color}   The selected color
+   */
+  public getColor(): Color {
+    const pallette: Pallette | null = this.hud?.getByName("pallette") as Pallette;
+    if (pallette) {
+      return pallette.getColor();
+    }
+    return new Color(0, 0, 0);
   }
 
   /**
@@ -259,23 +259,20 @@ export default class Drawing {
    * @return  {void}
    */
   public render(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D): void {
-    // build background
-    if (this.background == null) {
-      this.background = document.createElement('canvas');
-      this.background.width = canvas.width;
-      this.background.height = canvas.height;
-    }
-
+    // Clear the screen every frame
     context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(this.background, 0, 0);
 
+    // Render each og the entitites. (Drawings)
     for (let [key, entity] of this.entities) {
       entity.render(context)
     }
+
+    // Draw any pen helpers
     if (this.pen?.active_entity) {
       this.pen.active_entity.draw(context);
     }
 
+    //
     if (this.pen?.is_drawing) {
       this.pen.draw(context);
     }
@@ -310,16 +307,19 @@ export default class Drawing {
    *
    * @return  {void}
    */
-  public process(gameTime: number, timestamp: DOMHighResTimeStamp) : void {
+  public process(time: number, timestamp: DOMHighResTimeStamp) : void {
     // Calculate the number of seconds passed since the last frame
-    this.timeToDraw = gameTime / 1000;
+    this.timeToDraw = time / 1000;
 
     // Calculate fps
     this.fps = Math.round(1 / this.timeToDraw);
 
     this.removeEntities();
     for (let [key, entity] of this.entities) {
-      entity.process(gameTime)
+      entity.process(time)
     }
+
+    // Allow hud to process things
+    if (this.hud) this.hud.process(time);
   }
 }
