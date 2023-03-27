@@ -2,7 +2,7 @@ import Entity from "./entities/entity";
 import * as Vec2 from 'vector2d'; 
 import { Constants } from "./constants";
 import Pen from "./tools/pen";
-import Pallette from "./hud/pallette";
+import Pallette from "./hud/palette";
 import Hud from "./hud/hud";
 import Color from "./util/color";
 import HudItem from "./hud/hud_item";

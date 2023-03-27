@@ -11,3 +11,35 @@ body {
 #drawing-canvas {
   background-color: #fff;
 }
+
+#palette {
+  justify-content: space-around;
+  transform: translate(-50%, 0);
+  position: fixed;
+  display: flex;
+  height: 120px;
+  bottom: 0;
+  left: 50%;
+  padding-bottom: 20px;
+  pointer-events: none;
+  
+
+
+  .color {
+    margin: 20px;
+    pointer-events: all;
+    width: 80px;
+    cursor: pointer;
+    height: 80px;
+    border-radius: 50%;
+    border: 10px solid rgba(255, 255, 255, 0);
+    &:hover {
+      border: 10px solid rgba(255, 255, 255, 0.8);
+    }
+    &.selected {
+      border: 10px solid rgba(204, 204, 255, 0.7);
+    }
+  }
+
+
+}

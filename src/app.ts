@@ -2,7 +2,7 @@ import { Constants } from "./constants";
 import * as Vec2 from "vector2d";
 import Drawing from "./drawing";
 import Marker from "./tools/marker";
-import Pallette from "./hud/pallette";
+import Pallette from "./hud/palette";
 import Hud from "./hud/hud";
 import { Vector } from "vector2d";
 
