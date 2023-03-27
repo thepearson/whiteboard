@@ -1,4 +1,5 @@
 import { Vector } from "vector2d";
+import { Constants } from "../constants";
 import HudItem from "./hud_item";
 
 export default class Hud {
@@ -17,6 +18,11 @@ export default class Hud {
    * Position of the mouse
    */
   cursor_position: Vector | null = null;
+
+  /**
+   * Event for the canvas.onMouseMove event
+   */
+  private click_event: any = null;
 
   /**
    * Call all the render functions of each HudItem
@@ -51,10 +57,16 @@ export default class Hud {
 
       if (this.cursor_position.x > start.x && this.cursor_position.x < end.x && this.cursor_position.y > start.y && this.cursor_position.y < end.y && this.items[i].hovered === false) {
         this.items[i].handleMouseEnter(this.cursor_position);
-      } 
+        this.click_event = document.getElementById(`${Constants.CANVAS_TARGET}`)?.addEventListener('click', (event: MouseEvent) => {
+          if (this.cursor_position) {
+            this.items[i].handleMouseClick(this.cursor_position);
+          }
+        });
+      }
 
       if ((this.cursor_position.x < start.x || this.cursor_position.x > end.x || this.cursor_position.y < start.y || this.cursor_position.y > end.y) && this.items[i].hovered === true) {
         this.items[i].handleMouseLeave(this.cursor_position);
+        document.getElementById(`#${Constants.CANVAS_TARGET}`)?.removeEventListener('click', this.click_event)
       }
     }
   }

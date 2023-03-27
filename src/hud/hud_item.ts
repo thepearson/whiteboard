@@ -58,7 +58,6 @@ export default abstract class HudItem {
     ];
   };
 
-
   /**
    * Called when the mouse enters the bounds of the UI
    *
@@ -74,4 +73,13 @@ export default abstract class HudItem {
    * @return  {void}
    */
   public abstract handleMouseLeave(position: Vector): void;
+
+  /**
+   * What to do when the mouse clicks inside the element
+   *
+   * @param   {Vector}  position
+   *
+   * @return  {void}
+   */
+  public abstract handleMouseClick(position: Vector): void;
 }

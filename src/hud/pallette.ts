@@ -17,6 +17,15 @@ export default class Pallette extends HudItem {
   selected_color: Color = new Color(0, 0, 0, 0.5);
 
   /**
+   * Color bounds
+   */
+  color_bounds: Array<{
+    position: Vector | null,
+    size: number,
+    color: Color
+  }> = [];
+
+  /**
    * Position of Pallette
    */
   position: Vector | null = null;
@@ -31,6 +40,12 @@ export default class Pallette extends HudItem {
     this.position = position;
     for (var color of Constants.COLORS) {
       this.colors.push(new Color(color.r, color.g, color.b, color.a));
+      
+      this.color_bounds.push({
+        position: null,
+        size: Constants.PALLETTE_SIZE,
+        color: new Color(color.r, color.g, color.b, color.a)
+      })
     }
 
     const offset = (this.colors.length / 2) * (Constants.PALLETTE_SIZE + Constants.TOOL_SPACING) - (Constants.PALLETTE_SIZE / 2 + Constants.TOOL_SPACING);
@@ -83,6 +98,8 @@ export default class Pallette extends HudItem {
         drawCircle(context, currentPosition, new Color(204, 204, 255, alpha), Constants.PALLETTE_SIZE + 25);  
       }
       const color = this.colors[i].getRgb();
+      this.color_bounds[i].position =currentPosition;
+
       drawCircle(context, currentPosition, new Color(color[0], color[1], color[2], alpha), Constants.PALLETTE_SIZE);
     }
   }
@@ -112,5 +129,22 @@ export default class Pallette extends HudItem {
     this.hovered = false;
     const f = document.getElementById(Constants.CANVAS_TARGET);
     if (f) f.style.cursor = "auto";
+  }
+
+  /**
+   * How to deal with the click niside the element
+   *
+   * @param   {Vector}  position
+   *
+   * @return  {void}
+   */
+  public handleMouseClick(position: Vector): void {
+    for (let i = 0; i < this.color_bounds.length; i++) {
+      const pos = this.color_bounds[i].position;
+      if (!pos) continue;
+      if (pos?.distance(position) <= this.color_bounds[i].size) {
+        this.setColorIndex(i);
+      }
+    }
   }
 }
