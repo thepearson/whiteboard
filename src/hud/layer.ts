@@ -36,6 +36,7 @@ export default class Layer {
   constructor(parent: HTMLCanvasElement, entities: Array<Entity>, ratio: number) {
     this.parent = parent;
     this.entities = [...entities];
+    this.height = (this.width / Constants.CANVAS_SIZE.width) * Constants.CANVAS_SIZE.height;
   }
 
   /**
@@ -48,7 +49,7 @@ export default class Layer {
     canvas.classList.add('layer')
     const context = canvas.getContext('2d');
 
-    this.parent?.appendChild(canvas);
+    this.parent?.insertBefore(canvas, this.parent.firstChild);
 
     if (context == null) return;
 

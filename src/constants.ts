@@ -17,7 +17,7 @@ export const Constants: {
     width: window.innerWidth,
     height: window.innerHeight
   },
-  LAYERS_WIDTH: 250,
+  LAYERS_WIDTH: 125,
   COLORS: [
     {
       r: 255,
