@@ -32,13 +32,7 @@ export default class Hud {
    * @return  {void}
    */
   public render(context: CanvasRenderingContext2D): void {
-    // Short circuit if not visible
-    if (!this.visible) return;
-
-    // Otherwise render all the HUD items.
-    for (let i = 0; i < this.items.length; i++) {
-      this.items[i].render(context);
-    }
+    // Currently does nothing
   }
 
   /**
@@ -49,26 +43,7 @@ export default class Hud {
    * @return  {void}           [return description]
    */
   public process(delta: number): void {
-    //for (let i = 0; i < this.items.length; i++) {
-      // const item_box: Array<Vector> = this.items[i].getBounds();
-      // const [start, end] = item_box;
 
-      // if (!this.cursor_position) continue;
-
-      // if (this.cursor_position.x > start.x && this.cursor_position.x < end.x && this.cursor_position.y > start.y && this.cursor_position.y < end.y && this.items[i].hovered === false) {
-      //   this.items[i].handleMouseEnter(this.cursor_position);
-      //   this.click_event = document.getElementById(`${Constants.CANVAS_TARGET}`)?.addEventListener('click', (event: MouseEvent) => {
-      //     if (this.cursor_position) {
-      //       this.items[i].handleMouseClick(this.cursor_position);
-      //     }
-      //   });
-      // }
-
-    //   if ((this.cursor_position.x < start.x || this.cursor_position.x > end.x || this.cursor_position.y < start.y || this.cursor_position.y > end.y) && this.items[i].hovered === true) {
-    //     this.items[i].handleMouseLeave(this.cursor_position);
-    //     document.getElementById(`#${Constants.CANVAS_TARGET}`)?.removeEventListener('click', this.click_event)
-    //   }
-    // }
   }
 
   /**

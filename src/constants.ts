@@ -7,6 +7,7 @@ export const Constants: {
     width: number,
     height: number
   },
+  LAYERS_WIDTH: number,
   COLORS: ColorMap[],
   CANVAS_TARGET: string
 } = {
@@ -16,6 +17,7 @@ export const Constants: {
     width: window.innerWidth,
     height: window.innerHeight
   },
+  LAYERS_WIDTH: 250,
   COLORS: [
     {
       r: 255,

@@ -2,10 +2,11 @@ import Entity from "./entities/entity";
 import * as Vec2 from 'vector2d'; 
 import { Constants } from "./constants";
 import Pen from "./tools/pen";
-import Pallette from "./hud/palette";
+import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import Color from "./util/color";
 import HudItem from "./hud/hud_item";
+import Layers from "./hud/layers";
 
 /**
  * Main world class, constructs everytrhing about the game world
@@ -127,6 +128,9 @@ export default class Drawing {
     entity.drawing = this;
     this.entities.set(this.entity_id, entity);
     this.entity_id += 1;
+
+    const layers: Layers = this.hud?.getByName('layers') as Layers;
+    layers.build();
   }
 
   /**
@@ -243,7 +247,7 @@ export default class Drawing {
    * @return  {Color}   The selected color
    */
   public getColor(): Color {
-    const pallette: Pallette | null = this.hud?.getByName("pallette") as Pallette;
+    const pallette: Palette | null = this.hud?.getByName("palette") as Palette;
     if (pallette) {
       return pallette.getColor();
     }

@@ -2,9 +2,10 @@ import { Constants } from "./constants";
 import * as Vec2 from "vector2d";
 import Drawing from "./drawing";
 import Marker from "./tools/marker";
-import Pallette from "./hud/palette";
+import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import { Vector } from "vector2d";
+import Layers from "./hud/layers";
 
 /**
  * The top-level Game class, manages setup, base loop, and events
@@ -88,9 +89,13 @@ export default class App {
 
     // Items to the hud
     const hud = new Hud();
-    const pallette = new Pallette(new Vector(Constants.CANVAS_SIZE.width / 2, Constants.CANVAS_SIZE.height - Constants.PALLETTE_SIZE));
-    pallette.setColorIndex(0);
-    hud.addItem(pallette);
+
+    const palette = new Palette();
+    palette.setColorIndex(0);
+    hud.addItem(palette);
+
+    const layers = new Layers(this.drawing);
+    hud.addItem(layers);
 
     this.drawing.hud = hud;
     

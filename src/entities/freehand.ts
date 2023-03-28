@@ -1,11 +1,15 @@
 import { Vector } from "vector2d";
+import { Constants } from "../constants";
 import drawCircle from "../util/circle";
 import Color from "../util/color";
+import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
 
 export default class Freehand extends Entity {
 
   points: Array<Vector> = [];
+
+  scale: number = 1.0;
 
   constructor(size: number, color: Color) {
     super('freehand')
@@ -23,21 +27,25 @@ export default class Freehand extends Entity {
   public draw(context: CanvasRenderingContext2D): void {
     if (this.points.length < 1) return;
 
+    let scale = this.scale;
+    if (context.canvas.width !== Constants.CANVAS_SIZE.width) {
+      scale = context.canvas.width / Constants.CANVAS_SIZE.width;
+    }
+    
     context.beginPath();
-    context.lineWidth = this.size;
+    context.lineWidth = this.size * scale;
     context.strokeStyle = this.color.getHex(false);
     context.fillStyle = this.color.getHex(false);
     context.lineCap = "round";
-    context.moveTo(this.points[0].x, this.points[0].y);
 
-    for (var i = 0; i < this.points.length; i++) {
-      context.lineTo(this.points[i].x, this.points[i].y);
+    const initialPoint = denormalize(this.points[0], context.canvas.width, context.canvas.height);
+    context.moveTo(initialPoint.x, initialPoint.y);
+
+    for (var i = 1; i < this.points.length; i++) {
+      const denormalized = denormalize(this.points[i], context.canvas.width, context.canvas.height);
+      context.lineTo(denormalized.x, denormalized.y);
     }
     context.stroke();
-
-    // for (let point of this.points) {
-    //   drawCircle(context, point, this.color, this.size);
-    // }
   }
 
   /**
@@ -48,7 +56,7 @@ export default class Freehand extends Entity {
    * @return  {void}              [return description]
    */
   public update(location: Vector): void {
-    this.points.push(location);
+    this.points.push(normalize(location, Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height));
   }
 
 }

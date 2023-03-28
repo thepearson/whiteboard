@@ -17,32 +17,17 @@ export default class Palette extends HudItem {
   selected_color: Color = new Color(0, 0, 0, 0.5);
 
   /**
-   * Color bounds
-   */
-  // color_bounds: Array<{
-  //   position: Vector | null,
-  //   size: number,
-  //   color: Color
-  // }> = [];
-
-  /**
-   * Position of Pallette
-   */
-  //position: Vector | null = null;
-
-  /**
    * The currently selected color index
    */
   selected_color_index: number = 1;
 
-  constructor(position: Vector) {
-    super("pallette");
-    //this.position = position;
+  constructor() {
+    super("palette");
     for (var color of Constants.COLORS) {
       this.colors.push(new Color(color.r, color.g, color.b, color.a));
     }
 
-    this.build();
+    this.update();
   }
 
   /**
@@ -87,76 +72,8 @@ export default class Palette extends HudItem {
   public setColorIndex(index: number): void {
     this.selected_color_index = index;
     this.selected_color = this.colors[this.selected_color_index];
-    this.build();
-  }
 
-
-  /**
-   * Renders the pallette
-   *
-   * @param   {CanvasRenderingContext2D}  context  Canvas 2D Drawing context
-   *
-   * @return  {void}
-   */
-  public render(context: CanvasRenderingContext2D): void {
-    // if (!this.position) return;
-    // let alpha = 0.2;
-    // if (this.hovered) alpha = 1.0;
-    // const offset = (this.colors.length / 2) * (Constants.PALLETTE_SIZE + Constants.TOOL_SPACING) - (Constants.PALLETTE_SIZE / 2 + Constants.TOOL_SPACING);
-
-    // for (let i = 0; i < this.colors.length; i++) {
-    //   const currentPosition = new Vector(this.position?.x - offset + (i * (Constants.PALLETTE_SIZE + Constants.TOOL_SPACING)), this.position?.y);
-    //   if (i === this.selected_color_index) {
-    //     drawCircle(context, currentPosition, new Color(204, 204, 255, alpha), Constants.PALLETTE_SIZE + 25);  
-    //   }
-    //   const color = this.colors[i].getRgb();
-    //   this.color_bounds[i].position =currentPosition;
-
-    //   drawCircle(context, currentPosition, new Color(color[0], color[1], color[2], alpha), Constants.PALLETTE_SIZE);
-    // }
-  }
-
-  /**
-   * What to do when the mouse cursor enters the pallette element
-   *
-   * @param   {Vector}  position
-   * 
-   * @return  {void}
-   */
-  public handleMouseEnter(position: Vector): void {
-    // this.hovered = true;
-    // const f = document.getElementById(Constants.CANVAS_TARGET);
-    // if (f) f.style.cursor = "pointer";
-  }
-
-
-  /**
-   * How to handle when the mouse cursor leaves the UI
-   *
-   * @param   {Vector}  position
-   *
-   * @return  {void}
-   */
-  public handleMouseLeave(position: Vector): void {
-    // this.hovered = false;
-    // const f = document.getElementById(Constants.CANVAS_TARGET);
-    // if (f) f.style.cursor = "auto";
-  }
-
-  /**
-   * How to deal with the click niside the element
-   *
-   * @param   {Vector}  position
-   *
-   * @return  {void}
-   */
-  public handleMouseClick(position: Vector): void {
-    // for (let i = 0; i < this.color_bounds.length; i++) {
-    //   const pos = this.color_bounds[i].position;
-    //   if (!pos) continue;
-    //   if (pos?.distance(position) <= this.color_bounds[i].size) {
-    //     this.setColorIndex(i);
-    //   }
-    // }
+    // Run any GUI updates
+    this.update();
   }
 }
