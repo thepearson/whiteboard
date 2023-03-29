@@ -43,7 +43,17 @@ export default class Freehand extends Entity {
 
     for (var i = 1; i < this.points.length; i++) {
       const denormalized = denormalize(this.points[i], context.canvas.width, context.canvas.height);
-      context.lineTo(denormalized.x, denormalized.y);
+
+      if (this.points.length > 2 && i < (this.points.length - 1)) {
+        const denomalizedNext = denormalize(this.points[i + 1], context.canvas.width, context.canvas.height);
+
+        var c = (denormalized.x + denomalizedNext.x) / 2;
+        var d = (denormalized.y + denomalizedNext.y) / 2;
+
+        context.quadraticCurveTo(denormalized.x, denormalized.y, c, d);
+      } else {
+        context.lineTo(denormalized.x, denormalized.y);
+      }
     }
     context.stroke();
   }
