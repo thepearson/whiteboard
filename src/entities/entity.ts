@@ -21,6 +21,11 @@ export default abstract class Entity {
   created: number = 0;
 
   /**
+   * Time the entity was finished drawing, milliseconds since EPOC
+   */
+  completed: number = 0;
+
+  /**
    * Colour of the pen
    *
    * @return  {Color}  Colour object that the entity will be drawn as.

@@ -9,7 +9,8 @@ export const Constants: {
   },
   LAYERS_WIDTH: number,
   COLORS: ColorMap[],
-  CANVAS_TARGET: string
+  CANVAS_TARGET: string,
+  LAYER_CREATE_DELAY: number,
 } = {
   PALLETTE_SIZE: 60,
   TOOL_SPACING: 20,
@@ -18,6 +19,7 @@ export const Constants: {
     height: window.innerHeight
   },
   LAYERS_WIDTH: 125,
+  LAYER_CREATE_DELAY: 5000,
   COLORS: [
     {
       r: 255,

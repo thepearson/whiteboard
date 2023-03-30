@@ -131,6 +131,7 @@ export default class Drawing {
 
     const layers: Layers = this.hud?.getByName('layers') as Layers;
     layers.build();
+    layers.draw();
   }
 
   /**

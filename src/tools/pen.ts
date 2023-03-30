@@ -92,6 +92,7 @@ export default abstract class Pen {
   public stopDrawing(): void {
     this.setIsDrawing(false);
     if (this.active_entity) {
+      this.active_entity.completed = Date.now();
       this.drawing.addEntity(this.active_entity);
       this.active_entity = null;
     }
