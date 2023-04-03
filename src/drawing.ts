@@ -5,21 +5,33 @@ import Pen from "./tools/pen";
 import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import Color from "./util/color";
-import HudItem from "./hud/hud_item";
-import Layers from "./hud/layers";
+import Layer from "./tools/layer";
 
 /**
  * Main world class, constructs everytrhing about the game world
  */
 export default class Drawing {
 
+
+
   /**
-   * All drawn entities, these will all get 
-   * processed and rendered when the need to be
-   *
-   * @var  {Map<number, Entity>}
+   * Layer incremental number, used to track unique numerical
+   * id of all entities loaded onto the canvas
+   * 
+   * @var {number}
    */
-  entities: Map<number, Entity> = new Map();
+  layer_id: number = 0;
+
+
+
+  /**
+   * The layers
+   *
+   * @return  {[type]}  [return description]
+   */
+  layers: Map<number, Layer> = new Map();
+
+
 
   /**
    * Heads up display (GUI)
@@ -28,19 +40,14 @@ export default class Drawing {
    */
   hud: Hud | null = null;
 
-  /**
-   * Entity incremental number, used to track unique numerical
-   * id of all entities loaded onto the canvas
-   * 
-   * @var {number}
-   */
-  entity_id: number = 0;
+
 
   /**
-   * The active entity
-   * 
+   * The active layer
    */
-  active_entity: Entity | null = null;
+  active_layer: Layer | null = null;
+
+
 
   /**
    * Should we draw the targets?
@@ -49,12 +56,16 @@ export default class Drawing {
    */
   draw_target: boolean = true;
 
+
+
   /**
    * Target current location
    *
    * @var {Vec2.Vector}
    */
   target: Vec2.Vector | null = null;
+
+
 
   /**
    * Current pen
@@ -64,9 +75,6 @@ export default class Drawing {
   pen: Pen | null = null;
 
 
-  /**
-   * [description]
-   */
 
   /**
    * Helper to calculate FPS and framerates
@@ -75,12 +83,16 @@ export default class Drawing {
    */
   timeToDraw: number = 0;
 
+
+
   /**
    * Holder for deltatime
    * 
    * @var {number}
    */
   dt: number = 0;
+
+
 
   /**
    * Previous frame timestamp
@@ -89,12 +101,16 @@ export default class Drawing {
    */
   oldTimestamp: DOMHighResTimeStamp = 0.0;
 
+
+
   /**
    * Frames per second holder
    * 
    * @var {number}
    */
   fps: number = 0;
+
+
 
   /**
    * Show debug?
@@ -103,35 +119,43 @@ export default class Drawing {
    */
   show_debug: boolean = false;
 
+  
+
   /**
-   * Returns a game Entity
+   * Returns a Layer
    *
-   * @param   {number}  id  Entiti numerical ID
+   * @param   {number}  id  Layer numerical ID
    *
-   * @return  {Entity}
+   * @return  {Layer}
    */
-  public getEntity(id: number): Entity | null {
-    const entity = this.entities.get(id);
-    if (entity) return entity;
+  public getLayer(id: number): Layer | null {
+    const layer = this.layers.get(id);
+    if (layer) return layer;
     return null;
   }
 
+
   /**
-   * Adds an entity to the game
+   * [addLayer description]
+   *
+   * @return  {void}    [return description]
+   */
+  public addLayer(): void {
+    this.active_layer = new Layer(this.layer_id, this);
+    this.layers.set(this.active_layer.id, this.active_layer);
+    this.layer_id++;
+  }
+  
+  /**
+   * Adds an entity to the active layer
    *
    * @param   {Entity}  entity  Entity to add to the gameworld
    *
    * @return  {void}
    */
   public addEntity(entity: Entity): void {
-    entity.id = this.entity_id;
-    entity.drawing = this;
-    this.entities.set(this.entity_id, entity);
-    this.entity_id += 1;
-
-    const layers: Layers = this.hud?.getByName('layers') as Layers;
-    layers.build();
-    layers.draw();
+    if (!this.active_layer) this.addLayer();
+    this.active_layer?.addEntity(entity);
   }
 
   /**
@@ -191,26 +215,21 @@ export default class Drawing {
    */
   public countEntities(type?: string): number {
     let count = 0;
-
-    if (!type) return this.entities.size;
-
-    for (let [key, entity] of this.entities) {
-      if (entity.name == type && entity.remove == false) {
-        count++;
-      }
+    for (let [key, layer] of this.layers) {
+      count += layer.countEntities(type);
     }
     return count;
   }
 
   /**
-   * Remove an entity fromt he game
+   * Remove a Layer from the canvas
    *
    * @param   {number}  id  Numebrical ID of the entity 
    *
    * @return  {void}
    */
-  public removeEntity(id: number): void {
-    this.entities.delete(id);
+  public removeLayer(id: number): void {
+    this.layers.delete(id);
   }
 
   /**
@@ -227,7 +246,8 @@ export default class Drawing {
     context.font = '11px Arial';
     context.fillStyle = 'black';
     context.fillText("FPS: " + this.fps, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 85);
-    context.fillText("ENT: " + this.entities.size, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 70);
+    context.fillText("LAYERS: " + this.layers.size, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 70);
+    context.fillText("ENT: " + this.countEntities(), Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 55);
   }
 
   /**
@@ -267,17 +287,17 @@ export default class Drawing {
     // Clear the screen every frame
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Render each og the entitites. (Drawings)
-    for (let [key, entity] of this.entities) {
-      entity.render(context)
+    // Render each of the existing entitites. (Drawings)
+    for (let [key, layer] of this.layers) {
+      layer.render(context)
     }
 
-    // Draw any pen helpers
+    // Draw any pen helpers, draw the thing currently being drawn.
     if (this.pen?.active_entity) {
       this.pen.active_entity.draw(context);
     }
 
-    //
+    // Draw to the entity currently being drawn
     if (this.pen?.is_drawing) {
       this.pen.draw(context);
     }
@@ -296,11 +316,8 @@ export default class Drawing {
    * @return  {void} 
    */
   public removeEntities(): void {
-    const ids: number[] = [];
-    for (let [key, entity] of this.entities) {
-      if (entity.remove) {
-        this.entities.delete(key);
-      }
+    for (let [key, layer] of this.layers) {
+      layer.removeEntities();
     }
   }
 
@@ -320,8 +337,8 @@ export default class Drawing {
     this.fps = Math.round(1 / this.timeToDraw);
 
     this.removeEntities();
-    for (let [key, entity] of this.entities) {
-      entity.process(time)
+    for (let [key, layer] of this.layers) {
+      layer.process(time, timestamp)
     }
 
     // Allow hud to process things

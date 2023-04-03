@@ -1,7 +1,7 @@
 import { Constants, LAYER_CREATE_TIME, LAYER_CREATE_KEYS } from "../constants";
 import Drawing from "../drawing";
 import HudItem from "./hud_item";
-import Layer from "./layer";
+import Layer from "../tools/layer";
 
 export default class Layers extends HudItem {
 
@@ -60,10 +60,12 @@ export default class Layers extends HudItem {
     if (!this.target) return;
 
     if (!this.current_layer) {
-      this.current_layer = new Layer(this.target, 1, 0);
+      //this.current_layer = new Layer(this.target, 1, 0);
     }
 
-    
+    // for (let [key, entity] of this.drawing.entities) {
+
+    // }
   }
 
   /**
@@ -78,19 +80,19 @@ export default class Layers extends HudItem {
     let index = 0;
     let current_time = 0;
 
-    this.current_layer = new Layer(this.target, 1, index);
-    for (let [key, entity] of this.drawing.entities) {
-      if (entity.completed < (current_time + Constants.LAYER_CREATE_DELAY)) {
-        this.current_layer.addEntity(entity);
-        current_time = entity.completed;
-      } else {
-        index++;
-        current_time = entity.completed;
-        this.current_layer = new Layer(this.target, 1, index);
-        this.current_layer.addEntity(entity);
-        this.layers.push(this.current_layer);
-      }
-    }
+    //this.current_layer = new Layer(this.target, 1, index);
+    // for (let [key, entity] of this.drawing.entities) {
+    //   if (entity.completed < (current_time + Constants.LAYER_CREATE_DELAY)) {
+    //     this.current_layer.addEntity(entity);
+    //     current_time = entity.completed;
+    //   } else {
+    //     index++;
+    //     current_time = entity.completed;
+    //     this.current_layer = new Layer(this.target, 1, index);
+    //     this.current_layer.addEntity(entity);
+    //     this.layers.push(this.current_layer);
+    //   }
+    // }
   }
 
   /**
