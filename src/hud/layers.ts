@@ -1,4 +1,4 @@
-import { Constants } from "../constants";
+import { Constants, LAYER_CREATE_TIME, LAYER_CREATE_KEYS } from "../constants";
 import Drawing from "../drawing";
 import HudItem from "./hud_item";
 import Layer from "./layer";
@@ -10,6 +10,10 @@ export default class Layers extends HudItem {
    */
   drawing: Drawing | null;
 
+  /**
+   * The layer we're currently working on
+   */
+  current_layer: Layer | null = null;
 
   /**
    * Array containing all the layers
@@ -34,29 +38,57 @@ export default class Layers extends HudItem {
     this.drawing = drawing;
   }
 
+
+  public addLayer(): void {
+
+  }
+
+  public build(): void {
+    switch (Constants.LAYER_CREATE_BEHAVIOR) {
+      case LAYER_CREATE_TIME:
+        this.buildTime();
+        break;
+      case LAYER_CREATE_KEYS:
+      default:
+        this.buildDefault();
+        break;
+    }
+  }
+
+  public buildDefault(): void {
+    if (!this.drawing) return;
+    if (!this.target) return;
+
+    if (!this.current_layer) {
+      this.current_layer = new Layer(this.target, 1, 0);
+    }
+
+    
+  }
+
   /**
    * Build the layers
    *
    * @return  {void}    [return description]
    */
-  public build(): void {
+  public buildTime(): void {
     if (!this.drawing) return;
     if (!this.target) return;
 
     let index = 0;
     let current_time = 0;
 
-    let current_layer = new Layer(this.target, 1, index);
+    this.current_layer = new Layer(this.target, 1, index);
     for (let [key, entity] of this.drawing.entities) {
       if (entity.completed < (current_time + Constants.LAYER_CREATE_DELAY)) {
-        current_layer.addEntity(entity);
+        this.current_layer.addEntity(entity);
         current_time = entity.completed;
       } else {
         index++;
         current_time = entity.completed;
-        current_layer = new Layer(this.target, 1, index);
-        current_layer.addEntity(entity);
-        this.layers.push(current_layer);
+        this.current_layer = new Layer(this.target, 1, index);
+        this.current_layer.addEntity(entity);
+        this.layers.push(this.current_layer);
       }
     }
   }

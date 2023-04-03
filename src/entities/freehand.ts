@@ -26,6 +26,7 @@ export default class Freehand extends Entity {
    */
   public draw(context: CanvasRenderingContext2D): void {
     if (this.points.length < 1) return;
+    const debug = true;
 
     let scale = this.scale;
     if (context.canvas.width !== Constants.CANVAS_SIZE.width) {
@@ -40,9 +41,12 @@ export default class Freehand extends Entity {
 
     const initialPoint = denormalize(this.points[0], context.canvas.width, context.canvas.height);
     context.moveTo(initialPoint.x, initialPoint.y);
-
     for (var i = 1; i < this.points.length; i++) {
       const denormalized = denormalize(this.points[i], context.canvas.width, context.canvas.height);
+      if (i === 1) {
+        context.lineTo(denormalized.x, denormalized.y);
+        continue;
+      }
 
       if (this.points.length > 2 && i < (this.points.length - 1)) {
         const denomalizedNext = denormalize(this.points[i + 1], context.canvas.width, context.canvas.height);
