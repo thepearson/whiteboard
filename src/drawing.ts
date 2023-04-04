@@ -156,6 +156,7 @@ export default class Drawing {
   public addEntity(entity: Entity): void {
     if (!this.active_layer) this.addLayer();
     this.active_layer?.addEntity(entity);
+    this.hud?.getByName("layers")?.build();
   }
 
   /**

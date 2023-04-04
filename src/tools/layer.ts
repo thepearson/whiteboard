@@ -143,22 +143,28 @@ export default class Layer {
     }
   }
 
-  /**
-   * [description]
-   */
-  public draw(): void {
-    let canvas: HTMLCanvasElement = document.getElementById(`layer-${this.id}`) as HTMLCanvasElement;
 
-    if (!canvas) {
-      canvas = document.createElement("canvas") as HTMLCanvasElement;
-      canvas.width = 150; // this.width;
-      canvas.height = 80; //this.height;
-      canvas.id = `layer-${this.id}`;
-      canvas.classList.add('layer')
+  /**
+   * Handles the UI drawing of a layer
+   *
+   * @param   {HTMLDivElement}     parent  [parent description]
+   * @param   {number}             width   [width description]
+   * @param   {number}             height  [height description]
+   *
+   * @return  {void}                       [return description]
+   */
+  public draw(parent: HTMLDivElement, width: number, height: number, active?: boolean): void {
+    const canvas = document.createElement("canvas") as HTMLCanvasElement;
+    canvas.width = width;
+    canvas.height = height;
+    canvas.id = `layer-${this.id}`;
+    canvas.classList.add('layer')
+    if (active) {
+      canvas.classList.add('active')
     }
 
     const context = canvas.getContext('2d');
-    //this.parent?.insertBefore(canvas, this.parent.firstChild);
+    parent?.insertBefore(canvas, parent.firstChild);
 
     if (context == null) return;
 

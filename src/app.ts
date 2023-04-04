@@ -94,8 +94,11 @@ export default class App {
     palette.setColorIndex(0);
     hud.addItem(palette);
 
+    this.drawing.addLayer();
     const layers = new Layers(this.drawing);
     hud.addItem(layers);
+    layers.build();
+    
 
     this.drawing.hud = hud;
     
