@@ -45,7 +45,7 @@ export default class Drawing {
   /**
    * The active layer
    */
-  active_layer: Layer | null = null;
+  active_layer: Layer | undefined;
 
 
 
@@ -120,6 +120,33 @@ export default class Drawing {
   show_debug: boolean = false;
 
   
+  /**
+   * Remove a Layer from the canvas
+   *
+   * @param   {number}  id  Numebrical ID of the entity 
+   *
+   * @return  {void}
+   */
+  public removeLayer(id: number | undefined): void {
+    if (!id) {
+      return;
+    }
+
+    this.layers.delete(id);
+
+    if (this.layers.has(id - 1)) {
+      this.active_layer = this.layers.get(id - 1);
+    } else if (this.layers.has(id + 1)) {
+      this.active_layer = this.layers.get(id + 1);
+    } else {
+      if (this.layers.size === 0) {
+        this.addLayer();  
+      } else {
+        this.active_layer = this.layers.get(Math.min(...this.layers.keys()));
+      }
+    }
+    this.redrawHud();
+  }
 
   /**
    * Returns a Layer
@@ -134,6 +161,9 @@ export default class Drawing {
     return null;
   }
 
+  public redrawHud(): void {
+    this.hud?.getByName("layers")?.build();
+  }
 
   /**
    * [addLayer description]
@@ -144,8 +174,9 @@ export default class Drawing {
     this.active_layer = new Layer(this.layer_id, this);
     this.layers.set(this.active_layer.id, this.active_layer);
     this.layer_id++;
+    this.redrawHud();
   }
-  
+
   /**
    * Adds an entity to the active layer
    *
@@ -156,7 +187,7 @@ export default class Drawing {
   public addEntity(entity: Entity): void {
     if (!this.active_layer) this.addLayer();
     this.active_layer?.addEntity(entity);
-    this.hud?.getByName("layers")?.build();
+    this.redrawHud();
   }
 
   /**
@@ -222,16 +253,6 @@ export default class Drawing {
     return count;
   }
 
-  /**
-   * Remove a Layer from the canvas
-   *
-   * @param   {number}  id  Numebrical ID of the entity 
-   *
-   * @return  {void}
-   */
-  public removeLayer(id: number): void {
-    this.layers.delete(id);
-  }
 
   /**
    * Draw the debugging panel

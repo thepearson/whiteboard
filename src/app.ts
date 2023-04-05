@@ -6,12 +6,19 @@ import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import { Vector } from "vector2d";
 import Layers from "./hud/layers";
+import KeyEvents from "./util/key_events";
 
 /**
  * The top-level Game class, manages setup, base loop, and events
  */
 export default class App {
   
+
+  /**
+   * Event for the canvas.onKeyDown event
+   */
+  private key_down: any = null;
+
   /**
    * Event for the canvas.onMouseMove event
    */
@@ -101,6 +108,12 @@ export default class App {
     
 
     this.drawing.hud = hud;
+
+    // Handle Keyboard events;
+    const keyEventHandler = new KeyEvents(this.drawing)
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      keyEventHandler.handle(event);
+    });
     
     // Add events
     if (this.canvas instanceof HTMLCanvasElement) {
