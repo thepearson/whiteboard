@@ -68,3 +68,89 @@ body {
     background-color: rgba(255, 255, 255, 1.0);
   }
 }
+
+#help.visible {
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #cdcdcd;
+  background-color: rgb(240, 240, 240);
+  width: 50%;
+  height: 50%;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    height: 8rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    button {
+      border: 0;
+      font-size: 1.5rem;
+      cursor: pointer;
+      height: 1rem;
+    }
+  
+    h2 {
+      font-size: 3rem;
+    }
+  }
+
+  h3 {
+    font-size: 2rem;
+    height: 4rem;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    .left {
+      width: 50%;
+      padding-right: 2rem;
+      p {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+    }
+
+    .right {
+      width: 50%;
+
+    dl.inline-flex {
+      display: flex;
+      flex-flow: row;
+      flex-wrap: wrap;
+      width: 100%;
+      /* set the container width*/
+      overflow: visible;
+    }
+
+    dl.inline-flex dt {
+      font-size: 1.5rem;
+      height: 2rem;
+      flex: 0 0 15%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    dl.inline-flex dd {
+      font-size: 1.5rem;
+      flex: 0 0 85%;
+      height: 2rem;
+      margin-left: auto;
+      text-align: left;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    }
+  }
+    
+}

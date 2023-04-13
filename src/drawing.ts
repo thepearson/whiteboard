@@ -128,10 +128,10 @@ export default class Drawing {
    * @return  {void}
    */
   public removeLayer(id: number | undefined): void {
-    if (!id) {
+    if (id === undefined) {
       return;
     }
-
+    
     this.layers.delete(id);
 
     if (this.layers.has(id - 1)) {
@@ -140,6 +140,7 @@ export default class Drawing {
       this.active_layer = this.layers.get(id + 1);
     } else {
       if (this.layers.size === 0) {
+        this.layers.clear();
         this.addLayer();  
       } else {
         this.active_layer = this.layers.get(Math.min(...this.layers.keys()));

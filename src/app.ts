@@ -106,8 +106,12 @@ export default class App {
     hud.addItem(layers);
     layers.build();
     
-
     this.drawing.hud = hud;
+
+    document.querySelector("#help #close")?.addEventListener('click', (event: Event) => {
+      const help = document.getElementById("help")
+      help?.classList.remove("visible");
+    });
 
     // Handle Keyboard events;
     const keyEventHandler = new KeyEvents(this.drawing)
