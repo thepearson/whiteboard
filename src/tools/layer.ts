@@ -11,6 +11,12 @@ export default class Layer {
   id: number = -1;
 
 
+  /**
+   * [description]
+   */
+  close_event: Event | null = null;
+
+
 
   /**
    * All drawn entities, these will all get 
@@ -158,6 +164,9 @@ export default class Layer {
     canvas.width = width;
     canvas.height = height;
     canvas.id = `layer-${this.id}`;
+    canvas.addEventListener('click', (event: Event) => {
+      this.drawing?.setActiveLayer(this.id);
+    })
     canvas.classList.add('layer')
     if (active) {
       canvas.classList.add('active')

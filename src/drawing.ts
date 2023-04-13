@@ -179,6 +179,16 @@ export default class Drawing {
   }
 
   /**
+   * [addLayer description]
+   *
+   * @return  {void}    [return description]
+   */
+  public setActiveLayer(id: number): void {
+    this.active_layer = this.layers.get(id);
+    this.redrawHud();
+  }
+
+  /**
    * Adds an entity to the active layer
    *
    * @param   {Entity}  entity  Entity to add to the gameworld
