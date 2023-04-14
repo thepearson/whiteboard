@@ -1,7 +1,6 @@
-import { Constants, LAYER_CREATE_TIME, LAYER_CREATE_KEYS } from "../constants";
+import { Constants } from "../constants";
 import Drawing from "../drawing";
 import HudItem from "./hud_item";
-import Layer from "../tools/layer";
 
 export default class Layers extends HudItem {
 

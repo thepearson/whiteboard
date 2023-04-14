@@ -6,21 +6,29 @@ export default class Hud {
 
   /**
    * Array of items to render for the Hud
+   * 
+   * @var {Array<HudItem>}
    */
   items: Array<HudItem> = [];
 
   /**
    * If we want the HUD to be visible
+   * 
+   * @var {boolean}
    */
   visible: boolean = true;
 
   /**
    * Position of the mouse
+   * 
+   * @var {Vector}
    */
   cursor_position: Vector | null = null;
 
   /**
    * Event for the canvas.onMouseMove event
+   * 
+   * @var {any}
    */
   private click_event: any = null;
 

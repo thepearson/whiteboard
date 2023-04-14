@@ -25,7 +25,7 @@ export default class Marker extends Pen {
    */
   public draw(context: CanvasRenderingContext2D) {
     if (this.active_entity) {
-      this.active_entity.update(this.location)
+      this.active_entity.add(this.location)
     }
   }
 

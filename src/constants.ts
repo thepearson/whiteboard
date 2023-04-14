@@ -1,5 +1,6 @@
 import { ColorMap } from "./types"
 
+// The default colors
 export const COLOR_RED: ColorMap = {r: 255, g: 0, b: 0, a: 1.0}
 export const COLOR_GREEN: ColorMap = {r: 0, g: 192, b: 0, a: 1.0}
 export const COLOR_BLUE: ColorMap = {r: 0, g: 0, b: 255, a: 1.0}
@@ -7,8 +8,7 @@ export const COLOR_YELLOW: ColorMap = {r: 255, g: 255, b: 0, a: 1.0}
 export const COLOR_ORANGE: ColorMap = {r: 255, g: 128, b: 0, a: 1.0}
 export const COLOR_BLACK: ColorMap = {r: 0, g: 0, b: 0, a: 1.0}
 
-export const LAYER_CREATE_TIME: number = 0;
-export const LAYER_CREATE_KEYS: number = 1;
+export const LAYER_CREATE_KEYS: number = 0;
 
 export const Constants: {
   PALLETTE_SIZE: number,
@@ -31,7 +31,7 @@ export const Constants: {
   },
   LAYERS_WIDTH: 125,
   LAYER_CREATE_DELAY: 5000,
-  LAYER_CREATE_BEHAVIOR: LAYER_CREATE_TIME,
+  LAYER_CREATE_BEHAVIOR: LAYER_CREATE_KEYS,
   COLORS: [
     COLOR_RED,
     COLOR_GREEN,

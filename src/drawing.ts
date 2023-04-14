@@ -8,11 +8,9 @@ import Color from "./util/color";
 import Layer from "./tools/layer";
 
 /**
- * Main world class, constructs everytrhing about the game world
+ * Main drawing class, constructs everytrhing
  */
 export default class Drawing {
-
-
 
   /**
    * Layer incremental number, used to track unique numerical
@@ -22,16 +20,12 @@ export default class Drawing {
    */
   layer_id: number = 0;
 
-
-
   /**
    * The layers
    *
-   * @return  {[type]}  [return description]
+   * @var  {Map<number, Layer>}
    */
   layers: Map<number, Layer> = new Map();
-
-
 
   /**
    * Heads up display (GUI)
@@ -40,41 +34,33 @@ export default class Drawing {
    */
   hud: Hud | null = null;
 
-
-
   /**
-   * The active layer
+   * The active layer, the layer we're currently drawing on.
    */
   active_layer: Layer | undefined;
 
-
-
   /**
-   * Should we draw the targets?
+   * Should we draw the targets. This is the size and shape of the current brush/tool.
+   * This is a temporary overlay so the user can see an indeication of what they are 
+   * doing before they do it.
    * 
    * @var {boolean}
    */
   draw_target: boolean = true;
 
-
-
   /**
-   * Target current location
+   * Target current location, where we're drawing/working.
    *
    * @var {Vec2.Vector}
    */
   target: Vec2.Vector | null = null;
 
-
-
   /**
-   * Current pen
+   * Current pen/tool the user has selected.
    * 
    * @var {Pen}
    */
   pen: Pen | null = null;
-
-
 
   /**
    * Helper to calculate FPS and framerates
@@ -83,93 +69,105 @@ export default class Drawing {
    */
   timeToDraw: number = 0;
 
-
-
   /**
-   * Holder for deltatime
+   * Holder for deltatime, used for animation.
    * 
    * @var {number}
    */
   dt: number = 0;
 
-
-
   /**
-   * Previous frame timestamp
+   * Previous frame timestamp, used to calculate FPS and animations.
    * 
    * @var {DOMHighResTimeStamp}
    */
   oldTimestamp: DOMHighResTimeStamp = 0.0;
 
-
-
   /**
-   * Frames per second holder
+   * Frames per second
    * 
    * @var {number}
    */
   fps: number = 0;
 
-
-
   /**
-   * Show debug?
+   * Show debug. Do we want to show debug info onscreen.
    * 
    * @var {boolean}
    */
   show_debug: boolean = false;
 
-  
   /**
    * Remove a Layer from the canvas
    *
-   * @param   {number}  id  Numebrical ID of the entity 
+   * @param   {number}  layer_id    ID of the layer to remove
    *
    * @return  {void}
    */
-  public removeLayer(id: number | undefined): void {
-    if (id === undefined) {
+  public removeLayer(layer_id: number | undefined): void {
+    if (layer_id === undefined) {
       return;
     }
-    
-    this.layers.delete(id);
 
-    if (this.layers.has(id - 1)) {
-      this.active_layer = this.layers.get(id - 1);
-    } else if (this.layers.has(id + 1)) {
-      this.active_layer = this.layers.get(id + 1);
+    // This removes the layer from the drawing
+    this.layers.delete(layer_id);
+
+    // Now that the layer has been removed
+    // we need to set the new active_layer.
+
+    // If there's one below, then choose that.
+    if (this.layers.has(layer_id - 1)) {
+      this.active_layer = this.layers.get(layer_id - 1);
+
+    // Otherwise choose the one above if it exists
+    } else if (this.layers.has(layer_id + 1)) {
+      this.active_layer = this.layers.get(layer_id + 1);
+    
+    // If neither of those are true...
     } else {
       if (this.layers.size === 0) {
+        // If there are no layers left, create a new one, set it active.
         this.layers.clear();
         this.addLayer();  
       } else {
+        // Oteherwise choose the layer with the smallest ID
         this.active_layer = this.layers.get(Math.min(...this.layers.keys()));
       }
     }
+
+    // Redraw the layers overview.
     this.redrawHud();
   }
 
   /**
-   * Returns a Layer
+   * Given an ID, return a Layer with that ID if it exists, null if it doesn't.
    *
-   * @param   {number}  id  Layer numerical ID
+   * @param   {number}  layer_id  ID of the layer to return.
    *
-   * @return  {Layer}
+   * @return  {Layer | null}
    */
-  public getLayer(id: number): Layer | null {
-    const layer = this.layers.get(id);
+  public getLayer(layer_id: number): Layer | null {
+    const layer = this.layers.get(layer_id);
     if (layer) return layer;
     return null;
   }
 
+  /**
+   * Redraw all HUD items. We don't want to do 
+   * this every frame as these are DOM items, so we have 
+   * an explicit call to do so when we need to.
+   *
+   * @return  {void}
+   */
   public redrawHud(): void {
     this.hud?.getByName("layers")?.build();
   }
 
   /**
-   * [addLayer description]
+   * Add a layer to the drawing, set it as active  
+   * and redraw the hud to show it in the layer overview.
    *
-   * @return  {void}    [return description]
+   * @return  {void}
    */
   public addLayer(): void {
     this.active_layer = new Layer(this.layer_id, this);
@@ -179,17 +177,31 @@ export default class Drawing {
   }
 
   /**
-   * [addLayer description]
+   * Sets the active layer.
+   * 
+   * @param   {number}  layer_id  ID of the layer to set as active.
    *
-   * @return  {void}    [return description]
+   * @return  {void}
    */
-  public setActiveLayer(id: number): void {
-    this.active_layer = this.layers.get(id);
+  public setActiveLayer(layer_id: number): void {
+    // TODO: Assumes the layer_id exists, what do we do if it doesn't?
+    this.active_layer = this.layers.get(layer_id);
     this.redrawHud();
   }
 
   /**
-   * Adds an entity to the active layer
+   * Returns the next Layer
+   *
+   * @param   {number}  current_layer_id  ID of the current layer.
+   *
+   * @return  {number}   Returns the ID of the next layer in the Map()
+   */
+  public getNextLayer(current_layer_id: number): number {
+    return 0;
+  }
+
+  /**
+   * Adds an entity to the active layer. This will get drawn in the next frame.
    *
    * @param   {Entity}  entity  Entity to add to the gameworld
    *
@@ -202,7 +214,7 @@ export default class Drawing {
   }
 
   /**
-   * Set the pen
+   * Set the pen/tool that the user has selected.
    *
    * @param   {Pen}  pen  Set's the active pen to Pen
    *
@@ -222,7 +234,7 @@ export default class Drawing {
   }
 
   /**
-   * Sets the current target position
+   * Sets the current target position (Where the mouse is)
    *
    * @var {Vec2.Vector} mouse_pos   Target position
    * 
@@ -236,7 +248,7 @@ export default class Drawing {
   }
 
   /**
-   * Helper function to draw the targets
+   * Helper function to draw the targets, (Draws the Pen helper to the UI)
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas drawing context
    *
@@ -249,10 +261,10 @@ export default class Drawing {
   }
 
   /**
-   * Return count of entites by type, if no type specified, 
+   * Return count of all entites by type, if no type specified, 
    * then retunr count of all.
    *
-   * @param   {string}  type  Entity Type|Name [optional]
+   * @param   {string?}  type  Entity Type|Name [optional]
    *
    * @return  {number}        Number of entities
    */
@@ -273,7 +285,6 @@ export default class Drawing {
    * @return  {void}
    */
   public drawDebug(context: CanvasRenderingContext2D): void {
-    // Draw number to the screen
     context.fillStyle = '#dddddd55';
     context.fillRect(Constants.CANVAS_SIZE.width - 75, Constants.CANVAS_SIZE.height - 100, 75, 100);
     context.font = '11px Arial';
@@ -284,19 +295,20 @@ export default class Drawing {
   }
 
   /**
-   * Draw the HUD gui
+   * Draw the HUD
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas rendering context
    *
    * @return  {void}
    */
-  public drawGui(context: CanvasRenderingContext2D): void {
+  public drawHud(context: CanvasRenderingContext2D): void {
     if (!this.hud) return;
     this.hud.render(context);
   }
 
   /**
-   * Returns the current active color
+   * Returns the current active color, as specified bu the palette.
+   * defaults to Black if no color is set.
    *
    * @return  {Color}   The selected color
    */
@@ -309,7 +321,7 @@ export default class Drawing {
   }
 
   /**
-   * Process all the rendering for the world
+   * Parent for all the rendering for the app
    *
    * @param   {HTMLCanvasElement}         canvas   Canvas
    * @param   {CanvasRenderingContext2D}  context  Canvas drawing context
@@ -335,12 +347,14 @@ export default class Drawing {
       this.pen.draw(context);
     }
 
-    // draw target if any
+    // Draw target, if turned on.
     if (this.draw_target) this.drawTarget(context);
 
+    // Show the debug, if turned on.
     if (this.show_debug) this.drawDebug(context);
 
-    this.drawGui(context);
+    // Draw the HUD.
+    this.drawHud(context);
   }
 
   /**
@@ -363,13 +377,19 @@ export default class Drawing {
    * @return  {void}
    */
   public process(time: number, timestamp: DOMHighResTimeStamp) : void {
+
     // Calculate the number of seconds passed since the last frame
     this.timeToDraw = time / 1000;
 
     // Calculate fps
     this.fps = Math.round(1 / this.timeToDraw);
 
+    // Remove any entities that are set for removal. Could probably 
+    /// be done in the loop below if performance becomes an issue,
+    // for now it's fine. Clearer to keep the seperate.
     this.removeEntities();
+
+    // Process any entity calcs for rendering next tick.
     for (let [key, layer] of this.layers) {
       layer.process(time, timestamp)
     }

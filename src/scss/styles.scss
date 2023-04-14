@@ -69,6 +69,10 @@ body {
   }
 }
 
+.hidden {
+  display: none;
+}
+
 #help.visible {
   font-family: Arial, Helvetica, sans-serif;
   position: fixed;
@@ -83,6 +87,7 @@ body {
   padding: 1rem;
   display: flex;
   flex-direction: column;
+
 
   .header {
     height: 8rem;

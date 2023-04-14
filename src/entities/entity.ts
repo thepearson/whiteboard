@@ -5,7 +5,7 @@ import Color from '../util/color';
 import Drawing from '../drawing';
 
 /**
- * Core entity class, all objects within the game field are entities.
+ * Core entity class, all drawn objects within the app are entities.
  */
 export default abstract class Entity {
 
@@ -83,13 +83,19 @@ export default abstract class Entity {
     this.draw(context);
   }
 
-
-  public process(gametime: number): void {
+  /**
+   * Process any entity updates or calculations to be rendered next tick.
+   *
+   * @param   {number}  delta  time since last frame.
+   *
+   * @return  {void}
+   */
+  public process(delta: number): void {
 
   }
 
   /**
-   * Draw the entity
+   * Abstract: Draw the entity, to be implemented by the inheriting class.
    *
    * @param   {CanvasRenderingContext2D}  context  [context description]
    *
@@ -97,14 +103,13 @@ export default abstract class Entity {
    */
   public abstract draw(context: CanvasRenderingContext2D): void;
 
-
   /**
-   * Update th entity
+   * Update the entity
    *
    * @param   {Vector}  location  [location description]
    *
    * @return  {void}              [return description]
    */
-  public abstract update(location: Vector): void;
+  public abstract add(location: Vector): void;
 
 }

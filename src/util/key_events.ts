@@ -26,6 +26,12 @@ export default class KeyEvents {
         const palette: Palette = this.drawing?.hud?.getByName('palette') as Palette;
         palette.setColorIndex(parseInt(event.key) - 1);
         break;
+      case 'e':
+        this.drawing?.setActiveLayer(1);
+        break;
+      case 'c':
+
+        break;
     }
   }
 

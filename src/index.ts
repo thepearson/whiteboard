@@ -9,8 +9,11 @@ import { Constants } from "./constants";
 const target = `#${Constants.CANVAS_TARGET}`;
 
 
-
+/**
+ * App entry point. Start here.
+ */
 (() => {
+
   // This is our target canvas
   const canvas = document.querySelector<HTMLCanvasElement>(target);
   if (canvas instanceof HTMLCanvasElement) {
@@ -19,12 +22,13 @@ const target = `#${Constants.CANVAS_TARGET}`;
     const context = canvas.getContext('2d');
     if (context == null) return; 
 
-    // Create Game object.
+    // Create application object.
     const app = new App(canvas, context);
   
-    // Define gameloop and process.
+    // Define animation loop and process.
     const animationLoop = (timestamp: DOMHighResTimeStamp): void => {
       
+      // Everything gets done here.
       app.process(timestamp);
     
       // Keep requesting new frames

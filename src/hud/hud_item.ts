@@ -4,6 +4,8 @@ export default abstract class HudItem {
 
   /**
    * The name of the HudItem
+   * 
+   * @var {string}
    */
   name: string;
 
@@ -18,7 +20,6 @@ export default abstract class HudItem {
     this.name = name;
   }
 
-
   /**
    * Call any update functions that need to be called.
    *
@@ -32,7 +33,7 @@ export default abstract class HudItem {
   /**
    * Each HUD item must implement a build function
    *
-   * @return  {void}    [return description]
+   * @return  {void}
    */
   public abstract build(): void;
 }
