@@ -1,5 +1,4 @@
 import { Vector } from "vector2d";
-import { Constants } from "../constants";
 import HudItem from "./hud_item";
 
 export default class Hud {
@@ -26,21 +25,14 @@ export default class Hud {
   cursor_position: Vector | null = null;
 
   /**
-   * Event for the canvas.onMouseMove event
-   * 
-   * @var {any}
-   */
-  private click_event: any = null;
-
-  /**
-   * Call all the render functions of each HudItem
+   * Would render any canvas based hud items.
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas rendering context
    *
    * @return  {void}
    */
   public render(context: CanvasRenderingContext2D): void {
-    // Currently does nothing
+    // Nothing here yet.
   }
 
   /**
@@ -51,7 +43,7 @@ export default class Hud {
    * @return  {void}           [return description]
    */
   public process(delta: number): void {
-
+    // Nothing here yet.
   }
 
   /**
@@ -80,7 +72,7 @@ export default class Hud {
   }
 
   /**
-   * Tracks the cursor position
+   * Tracks the cursor position for hud use.
    *
    * @param   {Vector}  position  Position of the mouse.
    *

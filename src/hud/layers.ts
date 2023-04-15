@@ -4,25 +4,24 @@ import HudItem from "./hud_item";
 
 export default class Layers extends HudItem {
 
-
   /**
    * Reference to the drawing
+   * 
+   * @var {Drawing | null}
    */
   drawing: Drawing | null;
 
-
   /**
-   * HTML Canvas E
+   * HTML Div Element, where the HTMLCanvasElement layers will be created.
+   * 
+   * @var {HTMLDivElement | null}
    */
   target: HTMLDivElement | null = null;
-
 
   /**
    * Sets up the layers section
    *
    * @param   {Drawing}  drawing
-   *
-   * @return  {[type]}
    */
   constructor(drawing: Drawing) {
     super("layers");
@@ -32,7 +31,9 @@ export default class Layers extends HudItem {
 
 
   /**
-   * Build the layers UI
+   * Build the layers UI, this empties then creates 
+   * HTMLCanvasElements inside the `this.target` HTMLDivElement
+   * This gives us the layer overview on the right.
    *
    * @return  {void}
    */
@@ -47,4 +48,5 @@ export default class Layers extends HudItem {
       layer.draw(this.target, width, height, this.drawing.active_layer === layer);
     }
   }
+  
 }

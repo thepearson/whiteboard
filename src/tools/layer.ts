@@ -6,17 +6,11 @@ export default class Layer {
 
 
   /**
-   * Layer ID
+   * This Layers ID
+   * 
+   * @var {number}
    */
   id: number = -1;
-
-
-  /**
-   * [description]
-   */
-  close_event: Event | null = null;
-
-
 
   /**
    * All drawn entities, these will all get 
@@ -26,14 +20,12 @@ export default class Layer {
    */
   entities: Map<number, Entity> = new Map();
 
-
-
   /**
    * The active entity
+   * 
+   * @var {Entity | null}
    */
   active_entity: Entity | null = null;
-
-
 
   /**
    * Entity incremental number, used to track unique numerical
@@ -43,28 +35,22 @@ export default class Layer {
    */
   entity_id: number = 0;
 
-
-
   /**
    * Reference to the main Drawing
+   * 
+   * @var {Drawing | null}
    */
   drawing: Drawing | null = null;
 
-
-
   /**
-   * Constructor for Layer
+   * Set up the Layer
    *
    * @param   {Drawing}  drawing  Drawing reference
-   *
-   * @return  {[type]} 
    */
   constructor(id: number, drawing: Drawing) {
     this.id = id;
     this.drawing = drawing;
   }
-
-
 
   /**
    * Adds an entity to the game
@@ -80,7 +66,6 @@ export default class Layer {
     this.entity_id += 1;
   }
 
-
   /**
    * Garbage clean up, removes any entities that are schedule for removal
    *
@@ -95,10 +80,8 @@ export default class Layer {
     }
   }
 
-
-
   /**
-   * Returns a game Entity
+   * Returns an Entity given an ID
    *
    * @param   {number}  id  Entiti numerical ID
    *
@@ -110,8 +93,6 @@ export default class Layer {
     return null;
   }
 
-
-
   /**
    * Return count of entites by type, if no type specified, 
    * then retunr count of all.
@@ -121,10 +102,11 @@ export default class Layer {
    * @return  {number}        Number of entities
    */
   public countEntities(type?: string): number {
-    let count = 0;
-
+    // No type specifice, so include all entities.
     if (!type) return this.entities.size;
 
+    // A type was specified, so check type before adding
+    let count = 0;
     for (let [key, entity] of this.entities) {
       if (entity.name == type && entity.remove == false) {
         count++;
@@ -133,8 +115,17 @@ export default class Layer {
     return count;
   }
 
-
-  public process(time: number, timestamp: DOMHighResTimeStamp): void {
+  /**
+   * Process any updates that need to be rendered next tick. We
+   * have the ability to remove the entities one by one. That's 
+   * still a TODO though.
+   *
+   * @param   {number}               deltatime        The time since last tick
+   * @param   {DOMHighResTimeStamp}  timestamp        Current timestamp
+   *
+   * @return  {void}
+   */
+  public process(deltatime: number, timestamp: DOMHighResTimeStamp): void {
     for (let [key, entity] of this.entities) {
       if (entity.remove) {
         this.entities.delete(key)
@@ -142,6 +133,13 @@ export default class Layer {
     }
   }
 
+  /**
+   * Handle all the rendering for this layers entities
+   *
+   * @param   {CanvasRenderingContext2D}  context  The canvas context for applying the entity reders to
+   *
+   * @return  {void}
+   */
   public render(context: CanvasRenderingContext2D):void {
    // Render each of the existing entitites. (Drawings)
     for (let [key, entity] of this.entities) {
@@ -151,32 +149,42 @@ export default class Layer {
 
 
   /**
-   * Handles the UI drawing of a layer
+   * Handles the UI drawing of a layer in the layer overview
    *
-   * @param   {HTMLDivElement}     parent  [parent description]
-   * @param   {number}             width   [width description]
-   * @param   {number}             height  [height description]
+   * @param   {HTMLDivElement}     parent  The Div element to render into
+   * @param   {number}             width   The target width of the canvas
+   * @param   {number}             height  The target height of the canvas
    *
-   * @return  {void}                       [return description]
+   * @return  {void}
    */
   public draw(parent: HTMLDivElement, width: number, height: number, active?: boolean): void {
+    // Create the new Canvas Element
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
+
+    // Set all it's properties
     canvas.width = width;
     canvas.height = height;
     canvas.id = `layer-${this.id}`;
+    canvas.classList.add('layer')
+
+    // Listen for the selected layer click
     canvas.addEventListener('click', (event: Event) => {
       this.drawing?.setActiveLayer(this.id);
     })
-    canvas.classList.add('layer')
+    
+    // Set the active class if it's the currently selected one.
     if (active) {
       canvas.classList.add('active')
     }
 
-    const context = canvas.getContext('2d');
+    // Newer layers go on top, so `insertBefore` is used
     parent?.insertBefore(canvas, parent.firstChild);
 
+    // Get the context for rendering
+    const context = canvas.getContext('2d');
     if (context == null) return;
 
+    // Render each of the entities to the new HTMLCanvasElement
     for (let [key, entity] of this.entities) {
       entity.render(context)
     }

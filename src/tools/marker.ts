@@ -8,30 +8,34 @@ import Pen from "./pen";
 export default class Marker extends Pen {
   
   /**
-   * Construct for marker
-   *
-   * @return  {Marker}  self
+   * Sets up marker
    */
   constructor(drawing: Drawing) {
     super(drawing, 'marker');
   }
 
   /**
-   * [draw description]
+   * While drawing (mousedown) constantly add the current cursor
+   * location to the active entity
    *
-   * @param   {CanvasRenderingContext2D}  context  [context description]
+   * @param   {CanvasRenderingContext2D}  context  Canvas redering context
    *
-   * @return  {[type]}                             [return description]
+   * @return  {void}
    */
-  public draw(context: CanvasRenderingContext2D) {
+  public draw(context: CanvasRenderingContext2D): void {
     if (this.active_entity) {
       this.active_entity.add(this.location)
     }
   }
 
-  
+  /**
+   * Returns the entity this `Pen` creates.
+   *
+   * @return  {Entity}  The entity to be added to the layer
+   */
   public getEntity(): Entity {
     const color = this.drawing.getColor();
     return new Freehand(this.size, color);
   }
+  
 }

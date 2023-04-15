@@ -295,7 +295,7 @@ export default class Drawing {
   }
 
   /**
-   * Draw the HUD
+   * Renders any canvas based hud items.
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas rendering context
    *
