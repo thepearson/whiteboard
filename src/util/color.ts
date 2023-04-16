@@ -8,27 +8,33 @@ export default class Color {
 
   /**
    * red
+   * 
+   * @var {number}
    */
   private r: number = 0;
 
   /**
    * green
+   * 
+   * @var {number}
    */
   private g: number = 0;
 
   /**
    * blue
+   * 
+   * @var {number}
    */
   private b: number = 0;
 
   /**
    * alpha
+   * 
+   * @var {number}
    */
   private a: number = 0.0;
 
   /**
-   * [constructor description]
-   *
    * @param   {number}  r  red [0 - 255]
    * @param   {number}  g  green [0 - 255]
    * @param   {number}  b  blue [0 - 255]

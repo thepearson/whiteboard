@@ -137,16 +137,16 @@ export default abstract class Pen {
   }
 
   /**
-   * [draw description]
+   * Abstract method to be implemented by the tool, how do we draw the thing.
    *
    * @param   {CanvasRenderingContext2D}  context  [context description]
    *
-   * @return  {[type]}                             [return description]
+   * @return  {void}
    */
   public abstract draw(context: CanvasRenderingContext2D): void;
 
   /**
-   * Function to return the drawn entity
+   * Abstract method to return the drawn entity, implemented by the tool
    *
    * @return  {Entity}  an instance of a drawn entity
    */
