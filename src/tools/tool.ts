@@ -4,18 +4,18 @@ import Color from "../util/color";
 import Drawing from "../drawing";
 import Entity from "../entities/entity";
 
-export default abstract class Pen {
+export default abstract class Tool {
 
 
   /**
-   * Name of the pen
+   * Name of the tool
    * 
    * @var {string}
    */
   name: string = '';
 
   /**
-   * Width of the pen
+   * Width of the tool
    * 
    * @var {number}
    */
@@ -29,14 +29,14 @@ export default abstract class Pen {
   target_color: Color = new Color(128, 128, 255, 0.2);
 
   /**
-   * Location of the Pen
+   * Location of the tool
    * 
    * @var {Vector}
    */
   location: Vector = new Vector(0, 0);
 
   /**
-   * Is the pen down (drawing)
+   * Is the tool down (drawing)
    * 
    * @var {boolean}
    */
@@ -58,7 +58,7 @@ export default abstract class Pen {
 
   /**
    * @param   {Drawing}  drawing  Main drawing canvas
-   * @param   {string}   name     The name of the Pen
+   * @param   {string}   name     The name of the tool
    */
   constructor(drawing: Drawing, name: string) {
     this.name = name;
@@ -66,9 +66,9 @@ export default abstract class Pen {
   }
 
   /**
-   * Set's the location of the pen
+   * Set's the location of the tool
    *
-   * @param   {Vector}  location  Location of the pen
+   * @param   {Vector}  location  Location of the tool
    *
    * @return  {void}
    */
@@ -77,7 +77,7 @@ export default abstract class Pen {
   }
 
   /**
-   * Start drawing, create the Pen's `Entity` and 
+   * Start drawing, create the tool's `Entity` and 
    * sets it as active.
    *
    * @return  {void} 
@@ -115,9 +115,9 @@ export default abstract class Pen {
   }
 
   /**
-   * Sets the drawing state of the Pen
+   * Sets the drawing state of the tool
    *
-   * @param   {boolean}  state  Is the pen drawing
+   * @param   {boolean}  state  Is the tool drawing
    *
    * @return  {void}
    */
@@ -126,7 +126,7 @@ export default abstract class Pen {
   }
 
   /**
-   * Draw the pen target
+   * Draw the tool target
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas drawing context
    *

@@ -1,7 +1,7 @@
 import Entity from "./entities/entity";
 import * as Vec2 from 'vector2d'; 
 import { Constants } from "./constants";
-import Pen from "./tools/pen";
+import Tool from "./tools/tool";
 import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import Color from "./util/color";
@@ -56,11 +56,11 @@ export default class Drawing {
   target: Vec2.Vector | null = null;
 
   /**
-   * Current pen/tool the user has selected.
+   * Current tool the user has selected.
    * 
-   * @var {Pen}
+   * @var {Tool}
    */
-  pen: Pen | null = null;
+  tool: Tool | null = null;
 
   /**
    * Helper to calculate FPS and framerates
@@ -214,14 +214,14 @@ export default class Drawing {
   }
 
   /**
-   * Set the pen/tool that the user has selected.
+   * Set the tool that the user has selected.
    *
-   * @param   {Pen}  pen  Set's the active pen to Pen
+   * @param   {Tool}  tool  Set's the active tool to Tool
    *
    * @return  {void}
    */
-  public setPen(pen: Pen): void {
-    this.pen = pen;
+  public setTool(tool: Tool): void {
+    this.tool = tool;
   }
 
   /**
@@ -242,21 +242,21 @@ export default class Drawing {
    */
   public setTargetPosition(mouse_pos: Vec2.Vector) : void {
     this.target = mouse_pos;
-    if (this.pen) {
-      this.pen.setLocation(mouse_pos);
+    if (this.tool) {
+      this.tool.setLocation(mouse_pos);
     }
   }
 
   /**
-   * Helper function to draw the targets, (Draws the Pen helper to the UI)
+   * Helper function to draw the targets, (Draws the Tool helper to the UI)
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas drawing context
    *
    * @return  {void}
    */
   public drawTarget(context: CanvasRenderingContext2D): void {
-    if (this.pen != null) {
-      this.pen.drawTarget(context);
+    if (this.tool != null) {
+      this.tool.drawTarget(context);
     }
   }
 
@@ -337,14 +337,14 @@ export default class Drawing {
       layer.render(context)
     }
 
-    // Draw any pen helpers, draw the thing currently being drawn.
-    if (this.pen?.active_entity) {
-      this.pen.active_entity.draw(context);
+    // Draw any tool helpers, draw the thing currently being drawn.
+    if (this.tool?.active_entity) {
+      this.tool.active_entity.draw(context);
     }
 
     // Draw to the entity currently being drawn
-    if (this.pen?.is_drawing) {
-      this.pen.draw(context);
+    if (this.tool?.is_drawing) {
+      this.tool.draw(context);
     }
 
     // Draw target, if turned on.

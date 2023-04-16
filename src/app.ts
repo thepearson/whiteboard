@@ -92,8 +92,8 @@ export default class App {
     // Create drawing
     this.drawing = new Drawing();
 
-    // Sets the defaul/starting Pen.
-    this.drawing.setPen(new Marker(this.drawing));
+    // Sets the defaul/starting Tool.
+    this.drawing.setTool(new Marker(this.drawing));
 
     // Add a layer to the drawing
     this.drawing.addLayer();
@@ -141,23 +141,23 @@ export default class App {
       })
 
       // If the mouse is down, signal to then drawing object that we're 
-      // drawing, with whatever pen we've currently selected.
+      // drawing, with whatever tool we've currently selected.
       this.mouse_down = this.canvas.addEventListener("mousedown", (event: MouseEvent) => {
-        this.drawing?.pen?.startDrawing()
+        this.drawing?.tool?.startDrawing()
       })
 
-      // Listen for mousewheel, and resize the pen depending on direction.
+      // Listen for mousewheel, and resize the tool depending on direction.
       this.mouse_wheel = this.canvas.addEventListener("wheel", (event: WheelEvent) => {
         if (event.deltaY > 0) {
-          this.drawing?.pen?.setSize(this.drawing?.pen.size - 2)
+          this.drawing?.tool?.setSize(this.drawing?.tool.size - 2)
         } else {
-          this.drawing?.pen?.setSize(this.drawing?.pen.size + 2)
+          this.drawing?.tool?.setSize(this.drawing?.tool.size + 2)
         }
       })
 
       // If we mouseup we need to tell the drawing object, we've stopped drawing.
       this.mouse_up = this.canvas.addEventListener("mouseup", (event: MouseEvent) => {
-        this.drawing?.pen?.stopDrawing();
+        this.drawing?.tool?.stopDrawing();
       })
     }
   }

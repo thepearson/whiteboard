@@ -3,9 +3,9 @@ import Color from "../util/color";
 import Drawing from "../drawing";
 import Entity from "../entities/entity";
 import Freehand from "../entities/freehand";
-import Pen from "./pen";
+import Tool from "./tool";
 
-export default class Marker extends Pen {
+export default class Marker extends Tool {
   
   /**
    * Sets up marker
@@ -29,7 +29,7 @@ export default class Marker extends Pen {
   }
 
   /**
-   * Returns the entity this `Pen` creates.
+   * Returns the entity this `Tool` creates.
    *
    * @return  {Entity}  The entity to be added to the layer
    */

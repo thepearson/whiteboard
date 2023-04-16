@@ -26,14 +26,14 @@ export default abstract class Entity {
   completed: number = 0;
 
   /**
-   * Colour of the pen
+   * Colour of the entity
    *
    * @return  {Color}  Colour object that the entity will be drawn as.
    */
   color: Color = new Color(0, 0, 0);
 
   /**
-   * Size of the pen
+   * Size of the entity
    */
   size: number = 0;
 
