@@ -40,11 +40,11 @@ export default class Color {
    * @param   {number}  b  blue [0 - 255]
    * @param   {number?}  a  alpha [0.0 - 1.0]
    */
-  constructor(r: number, g: number, b: number, a?: number) {
+  constructor(r: number, g: number, b: number, a: number = 1.0) {
     this.r = r;
     this.g = g;
     this.b = b;
-    this.a = a ? a : 1.0;
+    this.a = a;
   }
 
   /**
@@ -61,9 +61,18 @@ export default class Color {
    *
    * @return  {Array<number>}  
    */
-  public getRgbString(): string {
-    if (this.a) return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
-    return `rgba(${this.r}, ${this.g}, ${this.b})`;
+  public getRgba(): [number, number, number, number] {
+    return [this.r, this.g, this.b, this.a];
+  }
+
+  /**
+   * Returns an array of RGB values
+   *
+   * @return  {Array<number>}  
+   */
+  public getRgbString(withAlpha: boolean = true): string {
+    if (withAlpha === true) return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`;
+    return `rgb(${this.r}, ${this.g}, ${this.b})`;
   }
 
 
@@ -134,7 +143,7 @@ export default class Color {
     let r = this.r.toString(16);
     let g = this.g.toString(16);
     let b = this.b.toString(16);
-    let a = (this.a * 255).toString(16);
+    let a = Math.round((this.a * 255)).toString(16);
   
     if (r.length == 1) r = "0" + r;
     if (g.length == 1) g = "0" + g;

@@ -26,8 +26,8 @@ export const Constants: {
   PALLETTE_SIZE: 60,
   TOOL_SPACING: 20,
   CANVAS_SIZE: {
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: (window) ? window.innerWidth : 1980,
+    height: (window) ? window.innerHeight : 1080
   },
   LAYERS_WIDTH: 125,
   LAYER_CREATE_DELAY: 5000,
