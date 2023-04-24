@@ -55,6 +55,7 @@ export default class Hud {
    */
   public addItem(item: HudItem): void {
     this.items.push(item);
+    item.build();
   }
 
   /**

@@ -6,6 +6,7 @@ import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import Layers from "./hud/layers";
 import KeyEvents from "./util/key_events";
+import Toolbar from "./hud/toolbar";
 
 /**
  * The top-level App class, manages setup, base loop, and events
@@ -105,6 +106,10 @@ export default class App {
     const palette = new Palette();
     palette.setColorIndex(0);
     hud.addItem(palette);
+
+    const toolbar = new Toolbar("toolbar", this.drawing);
+    hud.addItem(toolbar);
+
 
     // Attach the layers overview to the HUD
     const layers = new Layers(this.drawing);
