@@ -201,12 +201,19 @@ export default class Layer {
    * @return  {void}                               [return description]
    */
   public drawGuides(context: CanvasRenderingContext2D, target: Vector): void {
+    let selected_vector: Vector | void;
+
     for (let [key, entity] of this.entities) {
-      entity.drawGuides(context, target, (vector: Vector) => {
-        if (vector && this.drawing?.tool && this.drawing?.tool.name === "select") {
-          (this.drawing?.tool as Select).selected_vector = vector;
-        }
-      });
+      entity.drawGuides(context, target);
+      if (!selected_vector) {
+        selected_vector = entity.getIntercetingVector(target);
+      }
+    }
+
+    if (selected_vector) {
+        (this.drawing?.tool as Select).selected_vector = selected_vector;
+    } else {
+        (this.drawing?.tool as Select).selected_vector = null;
     }
   }
 

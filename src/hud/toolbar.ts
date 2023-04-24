@@ -2,6 +2,7 @@ import Drawing from "../drawing";
 import Freehand from "../entities/freehand";
 import Marker from "../tools/marker";
 import Select from "../tools/select";
+import Shape from "../tools/shape";
 import HudItem from "./hud_item";
 
 export default class Toolbar extends HudItem {
@@ -11,13 +12,17 @@ export default class Toolbar extends HudItem {
     title: string 
   }> = [
     {
-      key: "select",
-      title: "Select"
-    },
-    {
       key: "marker",
       title: "Marker"
-    }
+    },
+    {
+      key: "freehand_shape",
+      title: "Closed"
+    },
+    {
+      key: "select",
+      title: "Modify"
+    },
   ];
 
   /**
@@ -44,6 +49,9 @@ export default class Toolbar extends HudItem {
         break;
       case 'marker':
         this.drawing?.setTool(new Marker(this.drawing))
+        break;
+      case 'freehand_shape':
+        this.drawing?.setTool(new Shape(this.drawing))
         break;
     }
     

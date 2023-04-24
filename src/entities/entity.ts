@@ -120,7 +120,7 @@ export default abstract class Entity {
    *
    * @return  {void}                               [return description]
    */
-  public abstract drawGuides(context: CanvasRenderingContext2D, target: Vector, callback: Function): void;
+  public abstract drawGuides(context: CanvasRenderingContext2D, target: Vector): void;
 
   /**
    * Update the entity
@@ -130,5 +130,14 @@ export default abstract class Entity {
    * @return  {void}              [return description]
    */
   public abstract add(location: Vector): void;
+
+  /**
+   * Returns a vector if intersected, void if otherwise.
+   *
+   * @param   {Vector}  position  [position description]
+   *
+   * @return  {Vector}            [return description]
+   */
+  public abstract getIntercetingVector(position: Vector): Vector | void;
 
 }

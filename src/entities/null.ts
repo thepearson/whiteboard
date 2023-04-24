@@ -9,6 +9,7 @@ import Drawing from "../drawing";
 
 export default class Null extends Entity {
 
+
   /**
    * Points of the freehand line
    * 
@@ -78,4 +79,7 @@ export default class Null extends Entity {
 
   }
 
+  public getIntercetingVector(position: Vector): void | Vector {
+    
+  }
 }

@@ -42,6 +42,18 @@ export default class Select extends Tool {
   }
 
   /**
+   * Stops drawing, adds enetity complete time, adds the 
+   * entity to the drawing, which will pass it to the 
+   * active layerand resets the active entity.
+   *
+   * @return  {void}
+   */
+  public stopDrawing(): void {
+    super.stopDrawing();
+    this.selected_vector = null;
+  }
+
+  /**
    * Draw the tool target
    *
    * @param   {CanvasRenderingContext2D}  context  Canvas drawing context

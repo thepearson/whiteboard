@@ -30,7 +30,7 @@ export default class KeyEvents {
    */
   public handle(event: KeyboardEvent): void {
     if (!this.drawing) return;
-    switch(event.key) {
+    switch(event.key.toLowerCase()) {
       case 'a':
         this.drawing.addLayer();
         break;
