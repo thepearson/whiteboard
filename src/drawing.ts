@@ -197,7 +197,38 @@ export default class Drawing {
    * @return  {number}   Returns the ID of the next layer in the Map()
    */
   public getNextLayer(current_layer_id: number): number {
-    return 0;
+    let next = false;
+
+    // Render each of the existing entitites. (Drawings)
+    for (let [key, layer] of this.layers) {
+      if (next === true) return key;
+
+      if (key === current_layer_id) {
+        next = true;
+      }
+    }
+    return 1;
+  }
+
+
+  /**
+   * Returns the prev Layer
+   *
+   * @param   {number}  current_layer_id  ID of the current layer.
+   *
+   * @return  {number}   Returns the ID of the next layer in the Map()
+   */
+  public getPrevLayer(current_layer_id: number): number {
+    let previous = -1;
+
+    // Render each of the existing entitites. (Drawings)
+    for (let [key, layer] of this.layers) {
+      if (key === current_layer_id) {
+        return previous;
+      }
+      previous = key;
+    }
+    return 1;
   }
 
   /**

@@ -47,10 +47,20 @@ export default class KeyEvents {
         palette.setColorIndex(parseInt(event.key) - 1);
         break;
       case 'e':
-        this.drawing.setActiveLayer(1);
+        // layer up
+        if (this.drawing.active_layer) {
+          this.drawing.setActiveLayer(this.drawing.getNextLayer(this.drawing.active_layer.id));
+        }
         break;
       case 'c':
-
+        if (this.drawing.active_layer) {
+          this.drawing.setActiveLayer(this.drawing.getPrevLayer(this.drawing.active_layer.id));
+        }
+        break;
+      case 'h':
+        const help = document.getElementById("help")
+        help?.classList.toggle("hidden");
+        help?.classList.toggle("visible");
         break;
     }
   }

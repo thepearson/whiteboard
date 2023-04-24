@@ -156,14 +156,15 @@ body {
     dl.inline-flex dt {
       font-size: 1.5rem;
       height: 2rem;
-      flex: 0 0 15%;
+      font-weight:900;
+      flex: 0 0 20%;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
     dl.inline-flex dd {
       font-size: 1.5rem;
-      flex: 0 0 85%;
+      flex: 0 0 80%;
       height: 2rem;
       margin-left: auto;
       text-align: left;
