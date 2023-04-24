@@ -1,6 +1,8 @@
+import { Vector } from "vector2d";
 import { Constants } from "../constants";
 import Drawing from "../drawing";
 import Entity from "../entities/entity";
+import Select from "./select";
 
 export default class Layer {
 
@@ -187,6 +189,24 @@ export default class Layer {
     // Render each of the entities to the new HTMLCanvasElement
     for (let [key, entity] of this.entities) {
       entity.render(context)
+    }
+  }
+
+  /**
+   * [drawGuides description]
+   *
+   * @param   {CanvasRenderingContext2D}  context  [context description]
+   * @param   {Vector}                    target   [target description]
+   *
+   * @return  {void}                               [return description]
+   */
+  public drawGuides(context: CanvasRenderingContext2D, target: Vector): void {
+    for (let [key, entity] of this.entities) {
+      entity.drawGuides(context, target, (vector: Vector) => {
+        if (vector && this.drawing?.tool && this.drawing?.tool.name === "select") {
+          (this.drawing?.tool as Select).selected_vector = vector;
+        }
+      });
     }
   }
 

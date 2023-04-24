@@ -120,7 +120,7 @@ export default abstract class Entity {
    *
    * @return  {void}                               [return description]
    */
-  public abstract drawGuides(context: CanvasRenderingContext2D): void;
+  public abstract drawGuides(context: CanvasRenderingContext2D, target: Vector, callback: Function): void;
 
   /**
    * Update the entity

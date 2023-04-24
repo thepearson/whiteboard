@@ -15,11 +15,14 @@ export default class Toolbar extends HudItem {
       title: "Select"
     },
     {
-      key: "freehand",
-      title: "Freehand"
+      key: "marker",
+      title: "Marker"
     }
   ];
 
+  /**
+   * Drawing reference.
+   */
   drawing: Drawing | null = null;
 
   constructor(name: string, drawing: Drawing) {
@@ -39,7 +42,7 @@ export default class Toolbar extends HudItem {
       case 'select':
         this.drawing?.setTool(new Select(this.drawing))
         break;
-      case 'freehand':
+      case 'marker':
         this.drawing?.setTool(new Marker(this.drawing))
         break;
     }

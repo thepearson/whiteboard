@@ -33,9 +33,9 @@ export default class Marker extends Tool {
    *
    * @return  {Entity}  The entity to be added to the layer
    */
-  public getEntity(): Entity {
+  public getEntity(drawing: Drawing): Entity {
     const color = this.drawing.getColor();
-    return new Freehand(this.size, color);
+    return new Freehand(this.size, color, this.drawing);
   }
   
 }

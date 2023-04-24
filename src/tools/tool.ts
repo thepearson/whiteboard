@@ -84,7 +84,7 @@ export default abstract class Tool {
    */
   public startDrawing(): void {
     this.setIsDrawing(true)
-    this.active_entity = this.getEntity();
+    this.active_entity = this.getEntity(this.drawing);
   }
 
   /**
@@ -107,9 +107,14 @@ export default abstract class Tool {
    */
   public stopDrawing(): void {
     this.setIsDrawing(false);
-    if (this.active_entity) {
-      // Run the completion functions
-      this.active_entity.complete();
+
+    if (!this.active_entity) return;
+
+    // Run the completion functions
+    this.active_entity.complete();
+
+    // If not the special entity
+    if (this.active_entity.name !== "null") {
 
       // Add the completed entity to the drawing
       this.drawing.addEntity(this.active_entity);
@@ -155,5 +160,5 @@ export default abstract class Tool {
    *
    * @return  {Entity}  an instance of a drawn entity
    */
-  public abstract getEntity(): Entity;
+  public abstract getEntity(drawing: Drawing): Entity;
 }

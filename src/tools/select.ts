@@ -4,9 +4,20 @@ import Drawing from "../drawing";
 import Entity from "../entities/entity";
 import Freehand from "../entities/freehand";
 import Tool from "./tool";
+import { Vector } from "vector2d";
+import Null from "../entities/null";
+import { normalize } from "../util/normalize";
+import { Constants } from "../constants";
 
 export default class Select extends Tool {
-  
+
+  /**
+   * Currently selected vedctor if any
+   * 
+   * @var {Vector}
+   */
+  selected_vector: Vector | null = null;
+
   /**
    * Sets up marker
    */
@@ -23,7 +34,22 @@ export default class Select extends Tool {
    * @return  {void}
    */
   public draw(context: CanvasRenderingContext2D): void {
+    const normalized_location = normalize(this.location, context.canvas.width, context.canvas.height);
+    if (this.selected_vector) {
+      this.selected_vector.x = normalized_location.x;
+      this.selected_vector.y = normalized_location.y;
+    }
+  }
 
+  /**
+   * Draw the tool target
+   *
+   * @param   {CanvasRenderingContext2D}  context  Canvas drawing context
+   *
+   * @return  {void}
+   */
+  public drawTarget(context: CanvasRenderingContext2D): void {
+    // void
   }
 
   /**
@@ -31,9 +57,9 @@ export default class Select extends Tool {
    *
    * @return  {Entity}  The entity to be added to the layer
    */
-  public getEntity(): Entity {
+  public getEntity(drawing: Drawing): Entity {
     const color = this.drawing.getColor();
-    return new Freehand(this.size, color);
+    return new Null(drawing);
   }
   
 }

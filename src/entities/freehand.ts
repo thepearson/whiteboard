@@ -4,6 +4,8 @@ import { flattenPoints, expandPoints, getCurvePoints, simplify } from "../util/p
 import Color from "../util/color";
 import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
+import Select from "../tools/select";
+import Drawing from "../drawing";
 
 export default class Freehand extends Entity {
 
@@ -26,8 +28,9 @@ export default class Freehand extends Entity {
    * @param   {number}  size   Size of the entity
    * @param   {Color}   color  Color of the entity
    */
-  constructor(size: number, color: Color) {
+  constructor(size: number, color: Color, drawing: Drawing) {
     super('freehand')
+    this.drawing = drawing;
     this.size = size;
     this.color = color;
   }
@@ -42,7 +45,7 @@ export default class Freehand extends Entity {
     super.complete();
 
     if (this.points.length < 1) return;
-    const simplified = simplify(this.points);
+    const simplified = simplify(this.points, 3);
     const flat: Array<number> = flattenPoints(simplified);
     const curved = getCurvePoints(flat);
     this.points = expandPoints(curved);
@@ -83,20 +86,13 @@ export default class Freehand extends Entity {
     context.moveTo(initialPoint.x, initialPoint.y);
 
     // Start at the second point `this.points[1]`
-    for (var i = 1; i < this.points.length; i++) {
+    for (var i = 0; i < this.points.length; i++) {
 
       // Denmormalise current point to pixel values
       const denormalized = denormalize(this.points[i], context.canvas.width, context.canvas.height);
 
-      // Draw a line to the second point this.points[1] 
-      // and continue to the next one.
-      if (i === 1) {
-        context.lineTo(denormalized.x, denormalized.y);
-        continue;
-      }
-
       // If there's more than 2 points and the current point isn't the last one...
-      if (this.points.length > 2 && i < (this.points.length - 1)) {
+      if (this.points.length > 1 && i < (this.points.length - 1)) {
 
         // Denormalise the next point, so that we can draw a quadratic curve to it
         const denomalizedNext = denormalize(this.points[i + 1], context.canvas.width, context.canvas.height);
@@ -124,22 +120,31 @@ export default class Freehand extends Entity {
    *
    * @return  {void}                               [return description]
    */
-  public drawGuides(context: CanvasRenderingContext2D): void {
+  public drawGuides(context: CanvasRenderingContext2D, target: Vector, callback: Function): void {
 
-    const size = 10;
+    const size = Constants.GUIDE_SIZE;
+    //let selected_vector: Vector | null = null;
 
     // If there's nothing to draw, shorcircuit.
-    if (this.points.length < 1) return;
+    if (this.points.length > 0) {
+      for (var i = 0; i < this.points.length; i++) {
+        const vector = denormalize(this.points[i], Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
+        context.beginPath();
+        context.lineWidth = 1;
 
-    for (var i = 1; i < this.points.length; i++) {
-      const vector = denormalize(this.points[i], Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
-      context.beginPath();
-      context.strokeStyle = "#8888FF";
-      context.lineWidth = 1;
-      context.rect(vector.x - (size / 2), vector.y - (size / 2), size, size);
-      context.stroke();
+        const startX = vector.x - (size / 2);
+        const startY = vector.y - (size / 2);
+
+        if (target.x > startX && target.x < (startX + size) && target.y > startY && target.y < (startY + size)) {
+          callback(this.points[i]);
+          context.strokeStyle = "#000000";
+        } else {
+          context.strokeStyle = "#8888FF";
+        }
+        context.rect(startX, startY, size, size);
+        context.stroke();
+      }
     }
-
   }
 
   /**

@@ -55,6 +55,14 @@ export default class Drawing {
    */
   target: Vec2.Vector | null = null;
 
+
+  /**
+   * Global tool size
+   * 
+   * @var {number}
+   */
+  global_target_size: number = 20;
+
   /**
    * Current tool the user has selected.
    * 
@@ -253,6 +261,7 @@ export default class Drawing {
    */
   public setTool(tool: Tool): void {
     this.tool = tool;
+    this.tool.setSize(this.global_target_size);
   }
 
   /**
@@ -387,12 +396,9 @@ export default class Drawing {
     // Draw the HUD.
     this.drawHud(context);
 
-    if (this.tool?.name === 'select' && this.active_layer) {
-      for (let [key, entity] of this.active_layer?.entities) {
-        entity.drawGuides(context);
-      }
+    if (this.tool?.name === 'select' && this.active_layer && this.target) {
+      this.active_layer.drawGuides(context, this.target);
     } 
-    
   }
 
   /**

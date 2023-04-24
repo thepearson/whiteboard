@@ -153,11 +153,13 @@ export default class App {
 
       // Listen for mousewheel, and resize the tool depending on direction.
       this.mouse_wheel = this.canvas.addEventListener("wheel", (event: WheelEvent) => {
+        if (!this.drawing) return;
         if (event.deltaY > 0) {
-          this.drawing?.tool?.setSize(this.drawing?.tool.size - 2)
+          this.drawing.tool?.setSize(this.drawing?.tool.size - 2)
         } else {
-          this.drawing?.tool?.setSize(this.drawing?.tool.size + 2)
+          this.drawing.tool?.setSize(this.drawing?.tool.size + 2)
         }
+        this.drawing.global_target_size = this.drawing?.tool?.size || 20;
       })
 
       // If we mouseup we need to tell the drawing object, we've stopped drawing.

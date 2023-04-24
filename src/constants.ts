@@ -12,6 +12,7 @@ export const LAYER_CREATE_KEYS: number = 0;
 
 export const Constants: {
   PALLETTE_SIZE: number,
+  GUIDE_SIZE: number,
   TOOL_SPACING: number,
   CANVAS_SIZE: {
     width: number,
@@ -29,6 +30,7 @@ export const Constants: {
     width: (window) ? window.innerWidth : 1980,
     height: (window) ? window.innerHeight : 1080
   },
+  GUIDE_SIZE: 10,
   LAYERS_WIDTH: 125,
   LAYER_CREATE_DELAY: 5000,
   LAYER_CREATE_BEHAVIOR: LAYER_CREATE_KEYS,
