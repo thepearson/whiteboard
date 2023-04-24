@@ -1,6 +1,6 @@
 import { Vector } from "vector2d";
 import { Constants } from "../constants";
-import drawCircle from "../util/circle";
+import { flattenPoints, expandPoints, getCurvePoints, simplify } from "../util/points";
 import Color from "../util/color";
 import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
@@ -30,6 +30,22 @@ export default class Freehand extends Entity {
     super('freehand')
     this.size = size;
     this.color = color;
+  }
+
+
+  /**
+   * [complete description]
+   *
+   * @return  {void}    [return description]
+   */
+  public complete(): void {
+    super.complete();
+
+    if (this.points.length < 1) return;
+    const simplified = simplify(this.points);
+    const flat: Array<number> = flattenPoints(simplified);
+    const curved = getCurvePoints(flat);
+    this.points = expandPoints(curved);
   }
 
   /**

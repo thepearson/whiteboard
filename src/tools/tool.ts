@@ -108,8 +108,13 @@ export default abstract class Tool {
   public stopDrawing(): void {
     this.setIsDrawing(false);
     if (this.active_entity) {
-      this.active_entity.completed = Date.now();
+      // Run the completion functions
+      this.active_entity.complete();
+
+      // Add the completed entity to the drawing
       this.drawing.addEntity(this.active_entity);
+      
+      // reset the active entity
       this.active_entity = null;
     }
   }

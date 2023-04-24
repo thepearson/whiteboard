@@ -94,6 +94,16 @@ export default abstract class Entity {
 
   }
 
+
+  /**
+   * Function to call when drawing is complete.
+   *
+   * @return  {<void>} 
+   */
+  public complete(): void {
+    this.completed = Date.now();
+  }
+
   /**
    * Abstract: Draw the entity, to be implemented by the inheriting class.
    *
@@ -102,6 +112,15 @@ export default abstract class Entity {
    * @return  {void}                               [return description]
    */
   public abstract draw(context: CanvasRenderingContext2D): void;
+
+  /**
+   * Abstract: Draw the entity, to be implemented by the inheriting class.
+   *
+   * @param   {CanvasRenderingContext2D}  context  [context description]
+   *
+   * @return  {void}                               [return description]
+   */
+  public abstract drawGuides(context: CanvasRenderingContext2D): void;
 
   /**
    * Update the entity
