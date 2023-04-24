@@ -355,6 +355,13 @@ export default class Drawing {
 
     // Draw the HUD.
     this.drawHud(context);
+
+    if (this.tool?.name === 'select' && this.active_layer) {
+      for (let [key, entity] of this.active_layer?.entities) {
+        entity.drawGuides(context);
+      }
+    } 
+    
   }
 
   /**

@@ -118,6 +118,31 @@ export default class Freehand extends Entity {
   }
 
   /**
+   * Draws tool guides
+   *
+   * @param   {CanvasRenderingContext2D}  context  [context description]
+   *
+   * @return  {void}                               [return description]
+   */
+  public drawGuides(context: CanvasRenderingContext2D): void {
+
+    const size = 10;
+
+    // If there's nothing to draw, shorcircuit.
+    if (this.points.length < 1) return;
+
+    for (var i = 1; i < this.points.length; i++) {
+      const vector = denormalize(this.points[i], Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
+      context.beginPath();
+      context.strokeStyle = "#8888FF";
+      context.lineWidth = 1;
+      context.rect(vector.x - (size / 2), vector.y - (size / 2), size, size);
+      context.stroke();
+    }
+
+  }
+
+  /**
    * Add a point to the canvas
    *
    * @param   {Vector}  location  [location description]
