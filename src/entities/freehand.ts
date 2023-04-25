@@ -6,6 +6,7 @@ import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
 import Select from "../tools/select";
 import Drawing from "../drawing";
+import drawGuide from "../util/guide";
 
 export default class Freehand extends Entity {
 
@@ -134,27 +135,11 @@ export default class Freehand extends Entity {
    * @return  {void}                               [return description]
    */
   public drawGuides(context: CanvasRenderingContext2D, target: Vector): void {
-
-    const size = Constants.GUIDE_SIZE;
-    //let selected_vector: Vector | null = null;
-
     // If there's nothing to draw, shorcircuit.
     if (this.points.length > 0) {
       for (var i = 0; i < this.points.length; i++) {
         const vector = denormalize(this.points[i], Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
-        context.beginPath();
-        context.lineWidth = 1;
-
-        const startX = vector.x - (size / 2);
-        const startY = vector.y - (size / 2);
-
-        if (target.x > startX && target.x < (startX + size) && target.y > startY && target.y < (startY + size)) {
-          context.strokeStyle = "#000000";
-        } else {
-          context.strokeStyle = "#8888FF";
-        }
-        context.rect(startX, startY, size, size);
-        context.stroke();
+        drawGuide(context, vector, target)
       }
     }
   }

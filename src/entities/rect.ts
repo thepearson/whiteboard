@@ -5,6 +5,7 @@ import Color from "../util/color";
 import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
 import Drawing from "../drawing";
+import drawGuide from "../util/guide";
 
 export default class Rect extends Entity {
 
@@ -100,7 +101,10 @@ export default class Rect extends Entity {
    * @return  {void}                               [return description]
    */
   public drawGuides(context: CanvasRenderingContext2D, target: Vector): void {
-
+    if (this.origin && this.destination) {
+      drawGuide(context, denormalize(this.origin, context.canvas.width, context.canvas.height), target);
+      drawGuide(context, denormalize(this.destination, context.canvas.width, context.canvas.height), target);
+    }
   }
 
   /**
@@ -129,7 +133,25 @@ export default class Rect extends Entity {
    * @return  {void}              [return description]
    */
   public getIntercetingVector(position: Vector): void | Vector {
+    const size = Constants.GUIDE_SIZE;
+    if (this.origin && this.destination) {
+      const denormal_origin = denormalize(this.origin, Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
 
+      if (position.x > (denormal_origin.x - (size / 2)) && 
+        position.x < ((denormal_origin.x - (size / 2)) + size) && 
+        position.y > (denormal_origin.y - (size / 2)) && 
+        position.y < ((denormal_origin.y - (size / 2)) + size)) {
+        return this.origin;
+      }
+
+      const denormal_destination = denormalize(this.destination, Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
+      if (position.x > (denormal_destination.x - (size / 2)) && 
+        position.x < ((denormal_destination.x - (size / 2)) + size) && 
+        position.y > (denormal_destination.y - (size / 2)) && 
+        position.y < ((denormal_destination.y - (size / 2)) + size)) {
+        return this.destination;
+      }
+    }
   }
 
 }
