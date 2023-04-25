@@ -34,7 +34,6 @@ export default class Null extends Entity {
     this.drawing = drawing;
   }
 
-
   /**
    * [complete description]
    *
@@ -54,7 +53,8 @@ export default class Null extends Entity {
    * @return  {void}
    */
   public draw(context: CanvasRenderingContext2D): void {
-
+    // Not used
+    return;
   }
 
   /**
@@ -65,7 +65,8 @@ export default class Null extends Entity {
    * @return  {void}                               [return description]
    */
   public drawGuides(context: CanvasRenderingContext2D, target: Vector): void {
-
+    // Not used
+    return;
   }
 
   /**
@@ -76,10 +77,31 @@ export default class Null extends Entity {
    * @return  {void}
    */
   public add(location: Vector): void {
-
+    // Not used
+    return;
   }
 
+  /**
+   * [getIntercetingVector description]
+   *
+   * @param   {Vector}  position  [position description]
+   *
+   * @return  {void}              [return description]
+   */
   public getIntercetingVector(position: Vector): void | Vector {
-    
+    // Not used
+    return;
+  }
+
+  /**
+   * [getBoundingBox description]
+   *
+   * @param   {Vector<Vector>}  position  [position description]
+   *
+   * @return  {void<Vector>}              [return description]
+   */
+  public getBoundingBox(): void | Array<Vector> {
+    // Not used
+    return;
   }
 }

@@ -6,7 +6,7 @@ import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
 import Select from "../tools/select";
 import Drawing from "../drawing";
-import drawGuide from "../util/guide";
+import { drawBoundingBox, drawGuide }  from "../util/guide";
 
 export default class Freehand extends Entity {
 
@@ -141,6 +141,9 @@ export default class Freehand extends Entity {
         const vector = denormalize(this.points[i], Constants.CANVAS_SIZE.width, Constants.CANVAS_SIZE.height);
         drawGuide(context, vector, target)
       }
+
+      const boundingBox = this.getBoundingBox() as Array<Vector>;
+      drawBoundingBox(boundingBox[0], boundingBox[1], context);
     }
   }
 
@@ -182,6 +185,29 @@ export default class Freehand extends Entity {
         }
       }
     }
+  }
+
+  /**
+   * [getBoundingBox description]
+   *
+   * @param   {Vector[]}  position  [position description]
+   *
+   * @return  {void[]}              [return description]
+   */
+  public getBoundingBox(): void | Vector[] {
+    let minX: number = Constants.CANVAS_SIZE.width;
+    let minY: number = Constants.CANVAS_SIZE.height;
+    let maxX: number = 0;
+    let maxY: number = 0;
+
+    for (let point of this.points) {
+      if (point.x < minX) minX = point.x;
+      if (point.y < minY) minY = point.y;
+      if (point.x >= maxX) maxX = point.x;
+      if (point.y >= maxY) maxY = point.y;
+    }
+
+    return [new Vector(minX, minY), new Vector(maxX, maxY)];
   }
 
 }

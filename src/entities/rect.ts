@@ -5,7 +5,7 @@ import Color from "../util/color";
 import { denormalize, normalize } from "../util/normalize";
 import Entity from "./entity";
 import Drawing from "../drawing";
-import drawGuide from "../util/guide";
+import { drawBoundingBox, drawGuide } from "../util/guide";
 
 export default class Rect extends Entity {
 
@@ -33,6 +33,8 @@ export default class Rect extends Entity {
    * @var {number}
    */
   scale: number = 1.0;
+
+  rotation: number = 0.01;
 
   /**
    * @param   {number}  size   Size of the entity
@@ -87,7 +89,6 @@ export default class Rect extends Entity {
       context.fillStyle = this.color.getHex(false);
 
       context.lineCap = "round";
-
       context.rect(origin.x, origin.y, -(origin.x - destination.x), -(origin.y - destination.y));
       context.stroke();
     }
@@ -105,6 +106,9 @@ export default class Rect extends Entity {
       drawGuide(context, denormalize(this.origin, context.canvas.width, context.canvas.height), target);
       drawGuide(context, denormalize(this.destination, context.canvas.width, context.canvas.height), target);
     }
+
+    const boundingBox = this.getBoundingBox() as Array<Vector>;
+    drawBoundingBox(boundingBox[0], boundingBox[1], context);
   }
 
   /**
@@ -152,6 +156,11 @@ export default class Rect extends Entity {
         return this.destination;
       }
     }
+  }
+
+  public getBoundingBox(): void | Vector[] {
+    if (this.origin && this.destination) return [this.origin, this.destination];
+    return;
   }
 
 }

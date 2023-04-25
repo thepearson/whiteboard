@@ -140,4 +140,7 @@ export default abstract class Entity {
    */
   public abstract getIntercetingVector(position: Vector): Vector | void;
 
+
+  public abstract getBoundingBox():  Array<Vector> | void;
+
 }
