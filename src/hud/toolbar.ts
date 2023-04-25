@@ -1,6 +1,7 @@
 import Drawing from "../drawing";
 import Freehand from "../entities/freehand";
 import Marker from "../tools/marker";
+import Rectangle from "../tools/rectangle";
 import Select from "../tools/select";
 import Shape from "../tools/shape";
 import HudItem from "./hud_item";
@@ -18,6 +19,10 @@ export default class Toolbar extends HudItem {
     {
       key: "freehand_shape",
       title: "Closed"
+    },
+    {
+      key: "rect",
+      title: "Rectangle"
     },
     {
       key: "select",
@@ -52,6 +57,9 @@ export default class Toolbar extends HudItem {
         break;
       case 'freehand_shape':
         this.drawing?.setTool(new Shape(this.drawing))
+        break;
+      case 'rect':
+        this.drawing?.setTool(new Rectangle(this.drawing))
         break;
     }
     
