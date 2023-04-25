@@ -86,6 +86,7 @@ export default class Freehand extends Entity {
     context.fillStyle = this.color.getHex(false);
     context.lineCap = "round";
 
+
     // We denormalize the points, based on the canvas size and scale.
     const initialPoint = denormalize(this.points[0], context.canvas.width, context.canvas.height);
 
@@ -116,7 +117,10 @@ export default class Freehand extends Entity {
       }
     }
 
-    if (this.close) context.closePath();
+    if (this.close) {
+      context.closePath();
+      context.fill()
+    }
 
     // Stroke it. ԅ(≖⌣≖ԅ)
     context.stroke();
