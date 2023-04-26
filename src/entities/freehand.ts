@@ -67,7 +67,7 @@ export default class Freehand extends Entity {
    *
    * @return  {void}
    */
-  public draw(context: CanvasRenderingContext2D): void {
+  public drawPath(context: CanvasRenderingContext2D, stroke: boolean): void {
 
     // If there's nothing to draw, shorcircuit.
     if (this.points.length < 1) return;
@@ -124,7 +124,18 @@ export default class Freehand extends Entity {
     }
 
     // Stroke it. ԅ(≖⌣≖ԅ)
-    context.stroke();
+    if (stroke) context.stroke();
+  }
+
+  /**
+   * [draw description]
+   *
+   * @param   {CanvasRenderingContext2D}  context  [context description]
+   *
+   * @return  {void}                               [return description]
+   */
+  public draw(context: CanvasRenderingContext2D): void {
+    this.drawPath(context, true);
   }
 
   /**
@@ -195,19 +206,58 @@ export default class Freehand extends Entity {
    * @return  {void[]}              [return description]
    */
   public getBoundingBox(): void | Vector[] {
-    let minX: number = Constants.CANVAS_SIZE.width;
-    let minY: number = Constants.CANVAS_SIZE.height;
+    const width = Constants.CANVAS_SIZE.width;
+    const height = Constants.CANVAS_SIZE.height;
+    let minX: number = width;
+    let minY: number = height;
     let maxX: number = 0;
     let maxY: number = 0;
 
     for (let point of this.points) {
-      if (point.x < minX) minX = point.x;
-      if (point.y < minY) minY = point.y;
-      if (point.x >= maxX) maxX = point.x;
-      if (point.y >= maxY) maxY = point.y;
+      const denormalizePoint = denormalize(point, width, height)
+      if (denormalizePoint.x < minX) minX = denormalizePoint.x;
+      if (denormalizePoint.y < minY) minY = denormalizePoint.y;
+      if (denormalizePoint.x >= maxX) maxX = denormalizePoint.x;
+      if (denormalizePoint.y >= maxY) maxY = denormalizePoint.y;
     }
 
-    return [new Vector(minX, minY), new Vector(maxX, maxY)];
+    return [
+      normalize(
+        new Vector(minX - (this.size / 2), minY - (this.size / 2)), 
+        width, 
+        height
+      ), 
+      normalize(
+        new Vector(maxX + (this.size / 2), maxY + (this.size / 2)), 
+        width, 
+        height
+      )
+    ];
   }
 
+  /**
+   * [isPointOver description]
+   *
+   * @return  {void}    [return description]
+   */
+  public isPointOver(context: CanvasRenderingContext2D, pointer: Vector): boolean | void {
+    this.drawPath(context, false);
+    if (this.close) {
+      return context.isPointInPath(pointer.x, pointer.y)
+    }
+    return context.isPointInStroke(pointer.x, pointer.y);
+  }
+
+  /**
+   * Moves an entity
+   *
+   * @param   {Vector}  vector  [vector description]
+   *
+   * @return  {void}            [return description]
+   */
+  public moveEntity(vector: Vector): void {
+    for (let point of this.points) {
+      point.subtract(vector);
+    }
+  }
 }

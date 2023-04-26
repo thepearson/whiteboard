@@ -14,7 +14,6 @@ export default abstract class Entity {
    */
   id: number = 0;
 
-
   /**
    * Time the entity was created, milliseconds since EPOC
    */
@@ -140,7 +139,26 @@ export default abstract class Entity {
    */
   public abstract getIntercetingVector(position: Vector): Vector | void;
 
-
+  /**
+   * [abstract description]
+   *
+   * @return  {Array<Vector><|>}[return description]
+   */
   public abstract getBoundingBox():  Array<Vector> | void;
 
+  /**
+   * Move an entity
+   *
+   * @param   {Vector}  vector  [vector description]
+   *
+   * @return  {void}            [return description]
+   */
+  public abstract moveEntity(vector: Vector): void;
+
+  /**
+   * [abstract description]
+   *
+   * @return  {void}    [return description]
+   */
+  public abstract isPointOver(context: CanvasRenderingContext2D, pointer: Vector): boolean | void;
 }

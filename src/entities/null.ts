@@ -104,4 +104,13 @@ export default class Null extends Entity {
     // Not used
     return;
   }
+
+  public isPointOver(context: CanvasRenderingContext2D, pointer: Vector): boolean | void {
+    // Not used
+    return;
+  }
+
+  public moveEntity(vector: Vector): void {
+    
+  }
 }

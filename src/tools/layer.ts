@@ -30,6 +30,11 @@ export default class Layer {
   active_entity: Entity | null = null;
 
   /**
+   * Is there an entity being targeted in edit mode?
+   */
+  entityTargeted: Entity | null = null;
+
+  /**
    * Entity incremental number, used to track unique numerical
    * id of all entities loaded onto the canvas
    * 
@@ -203,11 +208,33 @@ export default class Layer {
   public drawGuides(context: CanvasRenderingContext2D, target: Vector): void {
     let selected_vector: Vector | void;
 
+    let pointerOverEntity = null;
     for (let [key, entity] of this.entities) {
       entity.drawGuides(context, target);
+
+      const pointerOver = entity.isPointOver(context, target);
+      if (pointerOver) {
+        pointerOverEntity = entity; 
+      }
+
       if (!selected_vector) {
         selected_vector = entity.getIntercetingVector(target);
       }
+    }
+
+    if (pointerOverEntity) {
+      if (pointerOverEntity !== this.entityTargeted) {
+        this.entityTargeted = pointerOverEntity;
+      }
+    } else {
+      this.entityTargeted = null;
+    }
+    
+    const canvas = document.getElementById(Constants.CANVAS_TARGET);
+    if (this.entityTargeted) {
+      if (canvas) canvas.style.cursor = 'pointer';
+    } else {
+      if (canvas) canvas.style.cursor = 'default';
     }
 
     if (selected_vector) {

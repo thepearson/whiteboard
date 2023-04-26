@@ -82,9 +82,10 @@ export default abstract class Tool {
    *
    * @return  {void} 
    */
-  public startDrawing(): void {
+  public startDrawing(location: Vector): void {
     this.setIsDrawing(true)
     this.active_entity = this.getEntity(this.drawing);
+    this.setLocation(location);
   }
 
   /**

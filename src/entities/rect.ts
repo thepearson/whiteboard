@@ -65,7 +65,7 @@ export default class Rect extends Entity {
    *
    * @return  {void}
    */
-  public draw(context: CanvasRenderingContext2D): void {
+  public drawPath(context: CanvasRenderingContext2D, stroke: boolean): void {
 
     // If there's nothing to draw, shorcircuit.
     if (this.origin && this.destination) {
@@ -90,8 +90,13 @@ export default class Rect extends Entity {
 
       context.lineCap = "round";
       context.rect(origin.x, origin.y, -(origin.x - destination.x), -(origin.y - destination.y));
-      context.stroke();
+
+      if (stroke) context.stroke();
     }
+  }
+
+  public draw(context: CanvasRenderingContext2D): void {
+    this.drawPath(context, true);
   }
 
   /**
@@ -158,9 +163,39 @@ export default class Rect extends Entity {
     }
   }
 
+  /**
+   * Get Bounding box
+   *
+   * @return  {void[]}  [return description]
+   */
   public getBoundingBox(): void | Vector[] {
     if (this.origin && this.destination) return [this.origin, this.destination];
     return;
+  }
+
+  /**
+   * Is point over
+   *
+   * @param   {CanvasRenderingContext2D}  context  [context description]
+   * @param   {Vector}                    pointer  [pointer description]
+   *
+   * @return  {boolean}                            [return description]
+   */
+  public isPointOver(context: CanvasRenderingContext2D, pointer: Vector): boolean | void {
+    this.drawPath(context, false);
+    return context.isPointInStroke(pointer.x, pointer.y);
+  }
+
+  /**
+   * Move
+   *
+   * @param   {Vector}  vector  [vector description]
+   *
+   * @return  {void}            [return description]
+   */
+  public moveEntity(vector: Vector): void {
+    this.origin?.subtract(vector);
+    this.destination?.subtract(vector);
   }
 
 }

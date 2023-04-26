@@ -103,7 +103,7 @@ export default class Drawing {
    * 
    * @var {boolean}
    */
-  show_debug: boolean = false;
+  show_debug: boolean = true;
 
   /**
    * Remove a Layer from the canvas
@@ -332,6 +332,8 @@ export default class Drawing {
     context.fillText("FPS: " + this.fps, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 85);
     context.fillText("LAYERS: " + this.layers.size, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 70);
     context.fillText("ENT: " + this.countEntities(), Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 55);
+    context.fillText("LOC-X: " + this.target?.x, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 40);
+    context.fillText("LOC-Y: " + this.target?.y, Constants.CANVAS_SIZE.width - 70, Constants.CANVAS_SIZE.height - 25);
   }
 
   /**

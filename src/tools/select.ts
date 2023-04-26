@@ -19,10 +19,27 @@ export default class Select extends Tool {
   selected_vector: Vector | null = null;
 
   /**
+   * The inital point where we started drawing
+   */
+  initial_point: Vector | null = null;
+
+  /**
    * Sets up marker
    */
   constructor(drawing: Drawing) {
     super(drawing, 'select');
+  }
+
+  /**
+   * [setLocation description]
+   *
+   * @param   {Vector}  location  [location description]
+   *
+   * @return  {void}              [return description]
+   */
+  public startDrawing(location: Vector): void {
+    super.startDrawing(location);
+    if (!this.initial_point) this.initial_point = location;
   }
 
   /**
@@ -38,6 +55,14 @@ export default class Select extends Tool {
     if (this.selected_vector) {
       this.selected_vector.x = normalized_location.x;
       this.selected_vector.y = normalized_location.y;
+    } else {
+      if (this.drawing.active_layer?.entityTargeted) {
+        if (this.initial_point) {
+          const differenceVec: Vector = normalize(new Vector(this.initial_point.x - this.location.x, this.initial_point.y - this.location.y), context.canvas.width, context.canvas.height);
+          this.drawing.active_layer?.entityTargeted.moveEntity(differenceVec);
+          this.initial_point = this.location;
+        }
+      }
     }
   }
 
@@ -50,6 +75,7 @@ export default class Select extends Tool {
    */
   public stopDrawing(): void {
     super.stopDrawing();
+    this.initial_point = null;
     this.selected_vector = null;
   }
 

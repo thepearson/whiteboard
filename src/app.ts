@@ -148,7 +148,8 @@ export default class App {
       // If the mouse is down, signal to then drawing object that we're 
       // drawing, with whatever tool we've currently selected.
       this.mouse_down = this.canvas.addEventListener("mousedown", (event: MouseEvent) => {
-        this.drawing?.tool?.startDrawing()
+        const mouse_pos = new Vec2.Vector(event.clientX, event.clientY);
+        this.drawing?.tool?.startDrawing(mouse_pos)
       })
 
       // Listen for mousewheel, and resize the tool depending on direction.
