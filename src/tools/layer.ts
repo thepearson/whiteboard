@@ -222,9 +222,12 @@ export default class Layer {
       }
     }
 
+
     if (pointerOverEntity) {
       if (pointerOverEntity !== this.entityTargeted) {
-        this.entityTargeted = pointerOverEntity;
+        //if (!(this.drawing?.tool as Select).selected_vector) {
+          this.entityTargeted = pointerOverEntity;
+        //}
       }
     } else {
       this.entityTargeted = null;
@@ -238,7 +241,9 @@ export default class Layer {
     }
 
     if (selected_vector) {
+      if (!(this.drawing?.tool as Select).selected_vector) {
         (this.drawing?.tool as Select).selected_vector = selected_vector;
+      }
     } else {
         (this.drawing?.tool as Select).selected_vector = null;
     }

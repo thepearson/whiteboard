@@ -118,7 +118,7 @@ export default class Drawing {
   /**
    * Fill Color
    */
-  fill_color: Color = new Color(255, 255, 0, 1);
+  fill_color: Color = new Color(228, 228, 228, 1);
 
   /**
    * Remove a Layer from the canvas
@@ -283,14 +283,6 @@ export default class Drawing {
 
     // Items to the hud
     const hud = new Hud();
-
-    const setStroke = (color: Color) => {
-      this.stroke_color = color;
-    }
-
-    const setFill = (color: Color) => {
-      this.stroke_color = color;
-    }
 
     const color_picker = new ColorPicker(this);
     hud.addItem(color_picker);
