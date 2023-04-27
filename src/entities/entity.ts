@@ -29,7 +29,14 @@ export default abstract class Entity {
    *
    * @return  {Color}  Colour object that the entity will be drawn as.
    */
-  color: Color = new Color(0, 0, 0);
+  stroke_color: Color = new Color(0, 0, 0);
+
+  /**
+   * Colour of the entity
+   *
+   * @return  {Color}  Colour object that the entity will be drawn as.
+   */
+  fill_color: Color = new Color(0, 0, 0);
 
   /**
    * Size of the entity
@@ -61,14 +68,25 @@ export default abstract class Entity {
   }
 
   /**
-   * Sets Color
+   * Sets Stroke Color
    *
    * @param   {Color}  color  Color to set on the entity
    *
    * @return  {void}
    */
-  public setColor(color: Color): void {
-    this.color = color;
+  public setStrokeColor(color: Color): void {
+    this.stroke_color = color;
+  }
+
+  /**
+   * Sets Fill Color
+   *
+   * @param   {Color}  color  Color to set on the entity
+   *
+   * @return  {void}
+   */
+  public setFillColor(color: Color): void {
+    this.fill_color = color;
   }
 
   /**

@@ -35,7 +35,7 @@ export default class Marker extends Tool {
    */
   public getEntity(drawing: Drawing): Entity {
     const color = this.drawing.getColor();
-    return new Freehand(this.size, color, this.drawing);
+    return new Freehand(this.size, this.drawing.stroke_color, this.drawing.fill_color, this.drawing);
   }
   
 }

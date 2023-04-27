@@ -35,12 +35,13 @@ export default class Freehand extends Entity {
    * @param   {number}  size   Size of the entity
    * @param   {Color}   color  Color of the entity
    */
-  constructor(size: number, color: Color, drawing: Drawing, close: boolean = false) {
+  constructor(size: number,  stroke_color: Color, fill_color: Color, drawing: Drawing, close: boolean = false) {
     super('freehand')
     this.close = close;
     this.drawing = drawing;
     this.size = size;
-    this.color = color;
+    this.stroke_color = stroke_color;
+    this.fill_color = fill_color;
   }
 
 
@@ -83,8 +84,8 @@ export default class Freehand extends Entity {
     // Draw
     context.beginPath();
     context.lineWidth = this.size * scale;
-    context.strokeStyle = this.color.getHex(false);
-    context.fillStyle = this.color.getHex(false);
+    context.strokeStyle = this.stroke_color.getHex();
+    context.fillStyle = this.fill_color.getHex();
     context.lineCap = "round";
 
 
@@ -118,11 +119,16 @@ export default class Freehand extends Entity {
       }
     }
 
+    context.save();
+    context.clip();
+
     if (this.close) {
       context.closePath();
       context.fill()
     }
 
+    context.restore();
+    
     // Stroke it. ԅ(≖⌣≖ԅ)
     if (stroke) context.stroke();
   }

@@ -40,11 +40,12 @@ export default class Rect extends Entity {
    * @param   {number}  size   Size of the entity
    * @param   {Color}   color  Color of the entity
    */
-  constructor(size: number, color: Color, drawing: Drawing) {
+  constructor(size: number, stroke_color: Color, fill_color: Color, drawing: Drawing) {
     super('rect')
     this.drawing = drawing;
     this.size = size;
-    this.color = color;
+    this.stroke_color = stroke_color;
+    this.fill_color = fill_color;
   }
 
 
@@ -85,11 +86,21 @@ export default class Rect extends Entity {
       context.beginPath();
       context.lineWidth = this.size * scale;
 
-      context.strokeStyle = this.color.getHex(false);
-      context.fillStyle = this.color.getHex(false);
+      context.strokeStyle = this.stroke_color.getHex();
+      context.fillStyle = this.fill_color.getHex();
 
       context.lineCap = "round";
+
       context.rect(origin.x, origin.y, -(origin.x - destination.x), -(origin.y - destination.y));
+      // save the un-clipped context state
+      context.save();
+
+      // Create a clipping area from the path
+      // All new drawing will be contained inside
+      // the clipping area
+      context.clip();
+      context.fill();
+      context.restore();
 
       if (stroke) context.stroke();
     }
@@ -183,6 +194,9 @@ export default class Rect extends Entity {
    */
   public isPointOver(context: CanvasRenderingContext2D, pointer: Vector): boolean | void {
     this.drawPath(context, false);
+    if (this.fill_color.getRgba()[3] > 0) {
+      return context.isPointInPath(pointer.x, pointer.y);
+    }
     return context.isPointInStroke(pointer.x, pointer.y);
   }
 
