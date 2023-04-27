@@ -2,10 +2,14 @@ import Entity from "./entities/entity";
 import * as Vec2 from 'vector2d'; 
 import { Constants } from "./constants";
 import Tool from "./tools/tool";
-import Palette from "./hud/palette";
 import Hud from "./hud/hud";
 import Color from "./util/color";
 import Layer from "./tools/layer";
+import Marker from "./tools/marker";
+import Toolbar from "./hud/toolbar";
+import Layers from "./hud/layers";
+import KeyEvents from "./util/key_events";
+import ColorPicker from "./hud/color_picker";
 
 /**
  * Main drawing class, constructs everytrhing
@@ -104,6 +108,17 @@ export default class Drawing {
    * @var {boolean}
    */
   show_debug: boolean = true;
+
+
+  /**
+   * Stroke color
+   */
+  stroke_color: Color = new Color(0, 0, 0, 1);
+
+  /**
+   * Fill Color
+   */
+  fill_color: Color = new Color(255, 255, 0, 1);
 
   /**
    * Remove a Layer from the canvas
@@ -253,6 +268,140 @@ export default class Drawing {
   }
 
   /**
+   * [setup description]
+   *
+   * @param   {HTMLCanvasElement}  canvas  [canvas description]
+   *
+   * @return  {void}                       [return description]
+   */
+  public setup(canvas: HTMLCanvasElement): void {
+    // Sets the defaul/starting Tool.
+    this.setTool(new Marker(this));
+
+    // Add a layer to the drawing
+    this.addLayer();
+
+    // Items to the hud
+    const hud = new Hud();
+
+    const setStroke = (color: Color) => {
+      this.stroke_color = color;
+    }
+
+    const setFill = (color: Color) => {
+      this.stroke_color = color;
+    }
+
+    const color_picker = new ColorPicker(this);
+    hud.addItem(color_picker);
+
+    const toolbar = new Toolbar("toolbar", this);
+    hud.addItem(toolbar);
+
+    // Attach the layers overview to the HUD
+    const layers = new Layers(this);
+    hud.addItem(layers);
+
+    // Draw the overview, for each layer
+    layers.build();
+
+    // Attach the HUD to the drawing
+    this.hud = hud;
+
+    // Event listener to close the help popup that shows on load.
+    document.querySelector("#help #close")?.addEventListener('click', (event: Event) => {
+      const help = document.getElementById("help")
+      help?.classList.remove("visible");
+      help?.classList.add("hidden");
+    });
+
+    // Pass off all Keyboard events to the key_events handler. 
+    // Do this globally. Not just on the Canvas.
+    const keyEventHandler = new KeyEvents(this)
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      keyEventHandler.handle(event);
+    });
+    
+    // Attach some events to the main canvas
+    if (canvas instanceof HTMLCanvasElement) {
+
+      /**
+       * Envent to handle input movement
+       *
+       * @param   {MouseEvent}  event       [event description]
+       * @param   {[type]}      TouchEvent  [TouchEvent description]
+       *
+       * @return  {[type]}                  [return description]
+       */
+      const moveEvent = (event: MouseEvent | TouchEvent) => {
+        let position = null;
+        if (event instanceof MouseEvent) {
+          position = new Vec2.Vector(event.clientX, event.clientY);
+        } else {
+          position = new Vec2.Vector(event.touches[0].clientX, event.touches[0].clientY);
+        }
+        
+        this.setTargetPosition(position);
+        hud.setCursorPosition(position);
+      };
+
+      // Update the target position (where we want to draw) when the mouse moves over the canvas
+      canvas.addEventListener("mousemove", moveEvent);
+      canvas.addEventListener("touchmove", moveEvent);
+
+      /**
+       * Event to handle touch start
+       *
+       * @param   {MouseEvent}  event       [event description]
+       * @param   {[type]}      TouchEvent  [TouchEvent description]
+       *
+       * @return  {[type]}                  [return description]
+       */
+      const downEvent = (event: MouseEvent | TouchEvent) => {
+        let position = null;
+        if (event instanceof MouseEvent) {
+          position = new Vec2.Vector(event.clientX, event.clientY);
+        } else {
+          position = new Vec2.Vector(event.touches[0].clientX, event.touches[0].clientY);
+        }
+        this.tool?.startDrawing(position)
+      };
+
+      // If the mouse is down, signal to then drawing object that we're 
+      // drawing, with whatever tool we've currently selected.
+      canvas.addEventListener("mousedown", downEvent);
+      canvas.addEventListener("touchstart", downEvent);
+
+      // Listen for mousewheel, and resize the tool depending on direction.
+      canvas.addEventListener("wheel", (event: WheelEvent) => {
+        if (event.deltaY > 0) {
+          this.tool?.setSize(this.tool.size - 2)
+        } else {
+          this.tool?.setSize(this.tool.size + 2)
+        }
+        this.global_target_size = this.tool?.size || 20;
+      })
+
+      /**
+       * Event to handle stopping of mouse events
+       *
+       * @param   {MouseEvent}  event       [event description]
+       * @param   {[type]}      TouchEvent  [TouchEvent description]
+       *
+       * @return  {[type]}                  [return description]
+       */
+      const upEvent = (event: MouseEvent | TouchEvent) => {
+        this.tool?.stopDrawing();
+      };
+
+      // If we mouseup we need to tell the drawing object, we've stopped drawing.
+      canvas.addEventListener("mouseup", upEvent);
+      canvas.addEventListener("touchend", upEvent);
+    }
+
+  }
+
+  /**
    * Set the tool that the user has selected.
    *
    * @param   {Tool}  tool  Set's the active tool to Tool
@@ -355,11 +504,7 @@ export default class Drawing {
    * @return  {Color}   The selected color
    */
   public getColor(): Color {
-    const pallette: Palette | null = this.hud?.getByName("palette") as Palette;
-    if (pallette) {
-      return pallette.getColor();
-    }
-    return new Color(0, 0, 0);
+    return this.stroke_color;
   }
 
   /**

@@ -16,17 +16,18 @@
     "css-loader": "^6.7.1",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
-    "ts-node": "^10.9.1",
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.3.0",
+    "ts-node": "^10.9.1",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.9.0"
   },
   "dependencies": {
+    "vanilla-picker": "^2.12.1",
     "vector2d": "^3.0.0"
   }
 }

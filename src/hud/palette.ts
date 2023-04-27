@@ -32,8 +32,9 @@ export default class Palette extends HudItem {
    */
   constructor() {
     super("palette");
-    for (var color of Constants.COLORS) {
-      this.colors.push(new Color(color.r, color.g, color.b, color.a));
+    for (var color of []) {
+      if (!color) continue;
+      //this.colors.push(new Color(color.r, color.g, color.b, color.a));
     }
     this.update();
   }
